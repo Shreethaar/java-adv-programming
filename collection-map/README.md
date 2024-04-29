@@ -12,3 +12,23 @@
 - HashMap and LinkedHashMap allow null keys and values but not TreeMap
 - Map can't be traversed (brainfucked), need to convert into Set using keySet() or entrySet() method
 
+## Example uses of Map:
+- Dictionaries
+- A map of zip codes and cities
+- A map of ic numbers and person data
+- Store word frequencies in a text
+
+## Methods in Map Interface:
+- clear()
+- containsKey()
+- containsValue()
+- get()
+- isEmpty()
+- keySet()
+- put()
+- putAll()
+- remove()
+- size()
+- values()
+- forEach()
+
