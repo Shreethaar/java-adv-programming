@@ -1,3 +1,4 @@
+import java.util.Scanner;
 public class TestThrow1 {
 	public static void validate(int age) {
 		if(age<18) {
@@ -9,7 +10,10 @@ public class TestThrow1 {
 	}
 
 	public static void main(String[] args) {
-		validate(13);
+		System.out.println("Enter your age");
+		Scanner sc = new Scanner(System.in);
+		int age = sc.nextInt();
+		validate(age);
 		System.out.println("rest of the code...");
 	}
 }

@@ -25,6 +25,8 @@ public class ArrayListExample {
 		myFriendsList.clear();
 		System.out.println("The size of the list after clear method = " + myFriendsList.size());
 
+
+
 	
 	}
 
