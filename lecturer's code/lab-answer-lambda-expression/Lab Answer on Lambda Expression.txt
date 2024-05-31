@@ -1,0 +1,186 @@
+import java.util.Scanner;
+import java.util.function.BiFunction;
+
+public class Q2PredefinedInterface 
+{
+    public static void main(String[] args) {
+        
+        Scanner scan = new Scanner(System.in);
+        
+        BiFunction<Double, Double, Double> add = (a,b)-> a+b;
+        BiFunction<Double, Double, Double> substract = (a,b)-> a-b;
+        BiFunction<Double, Double, Double> multiply = (a,b)-> a*b;
+        BiFunction<Double, Double, Double> division = (a,b)-> a/b;
+        
+        System.out.print("Enter the first number = ");
+        double num1 = scan.nextDouble();
+        System.out.print("Enter the second number = ");
+        double num2 = scan.nextDouble();
+        System.out.print("Operation type = ");
+        char ope = scan.next().charAt(0);
+        double res=0.0;
+        switch(ope)
+        {
+            case '+': res=add.apply(num1, num2);break;
+            case '-': res=substract.apply(num1, num2);break;
+            case '*': res=multiply.apply(num1, num2);break;
+            case '/': res=division.apply(num1, num2);break;
+        }
+        System.out.println("The result = "+res);
+        
+    }
+}
+
+===================================================
+public interface Operation  {
+    
+    double doOperation (String op, double n1, double n2);
+}
+======================================================
+
+public class Q2UserDefinedInterface 
+{
+    public static void main(String[] args) {
+        
+               
+        Operation operasi = (ope, nom1, nom2)-> {
+            
+            switch (ope) {
+                case "+":
+                    return nom1+nom2;
+                    
+                case "-":
+                    return nom1-nom2;
+                    
+                case "*":
+                    return nom1*nom2;
+                    
+                case "/":
+                    return nom1/nom2;
+                    
+                default:
+                    return 0.0;
+            }
+        };
+               
+        System.out.println("The result + = "+operasi.doOperation("+", 3.0, 4.0));
+        System.out.println("The result - = "+operasi.doOperation("-", 3.0, 4.0));
+        System.out.println("The result * = "+operasi.doOperation("*", 3.0, 4.0));
+        System.out.println("The result / = "+operasi.doOperation("/", 3.0, 4.0));
+        
+    }
+}
+
+=================================================================
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author PC
+ */
+public class Q3ForEach 
+{
+    public static void main(String[] args) {
+        
+        List<Integer> nom1 = new ArrayList<Integer>();
+        nom1.add(1);
+        nom1.add(2);
+        nom1.add(3);
+        nom1.add(4);
+        
+        nom1.forEach(num -> System.out.println(num));
+    }
+}
+
+===================================================================
+public class Student 
+{
+    private int matrik;
+    private String name;
+
+    public Student(int matrik, String name) {
+        this.matrik = matrik;
+        this.name = name;
+    }
+
+    public int getMatrik() {
+        return matrik;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    
+}
+====================================================================
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author PC
+ */
+public class Q3ForEachStudent 
+{
+    public static void main(String[] args) {
+        
+        List<Student> students = new ArrayList<Student>();
+        students.add(new Student(111, "Ali"));
+        Student stud = new Student(222, "Abu");
+        students.add(stud);
+        students.add(new Student(333, "Ani"));
+        stud = new Student(333, "Ami");
+        students.add(stud);
+        
+        students.forEach(pupil -> System.out.println(pupil.getMatrik()+" "+pupil.getName()));
+    }
+}
+
+==================================================================
+import java.util.function.Consumer;
+
+/**
+ *
+ * @author PC
+ */
+public class Q4Lambda 
+{
+    public static void main(String[] args) {
+        
+        Consumer<String> length = (s) -> {
+          if (s.length() < 5)
+                System.out.println("The character < 5 = "+s);
+        };
+        
+        String name = "din";
+        length.accept(name);
+        
+    }
+}
+
+===============================================================
+public interface Checker {
+    
+    void doChecking(String characters);
+    
+}
+================================================================
+public class Q4UserDefinedInterface 
+{
+    public static void main(String[] args) 
+    {
+        Checker check = (name) -> {
+            if (name.length() < 5)
+                System.out.println("The character < 5 = "+name);
+        };
+        
+        String nama = "din";
+        System.out.println("Output = ");
+        check.doChecking(nama);
+    }
+}
+
+==============================================================
