@@ -9,22 +9,22 @@ public class Salesman {
     private double salesRepAnnualSales;
     public Salesman(String salesRepFullName, String salesRepStaffID, String salesRepICNum, String salesRepBankAcc, int salesRepTotalSalesUnit, double salesRepTotalSalesAmount, double salesRepMonthlySales, double salesRepAnnualSales) {this.setSalesRepFullName(salesRepFullName);this.setSalesRepStaffID(salesRepStaffID);this.setSalesRepICNum(salesRepICNum);this.setSalesRepBankAcc(salesRepBankAcc);this.setSalesRepTotalSalesUnit(salesRepTotalSalesUnit);this.setSalesRepTotalSalesAmount(salesRepTotalSalesAmount);this.setSalesRepMonthlySales(salesRepMonthlySales);this.setSalesRepAnnualSales(salesRepAnnualSales);
     }
-    private String getSalesRepFullName() {return salesRepFullName;}
-    private String getSalesRepStaffID() {return salesRepStaffID;}
-    private String getSalesRepICNum() {return salesRepICNum;}
-    private String getSalesRepBankAcc() {return salesRepBankAcc;}
-    private int getSalesRepTotalSalesUnit() {return salesRepTotalSalesUnit;}
-    private double getSalesRepTotalSalesAmount() {return salesRepTotalSalesAmount;}
-    private double getSalesRepMonthlySales() {return salesRepMonthlySales;}
-    private double getSalesRepAnnualSales() {return salesRepAnnualSales;}
-    private void setSalesRepFullName(String salesRepFullName) {this.salesRepFullName=salesRepFullName;}
-    private void setSalesRepStaffID(String salesRepStaffID) {this.salesRepStaffID=salesRepStaffID;}
-    private void setSalesRepICNum(String salesRepICNum) {this.salesRepICNum=salesRepICNum;}
-    private void setSalesRepBankAcc(String salesRepBankAcc) {this.salesRepBankAcc=salesRepBankAcc;}
-    private void setSalesRepTotalSalesUnit(int salesRepTotalSalesUnit) {this.salesRepTotalSalesUnit=salesRepTotalSalesUnit;}
-    private void setSalesRepTotalSalesAmount(double salesRepTotalSalesAmount) {this.salesRepTotalSalesAmount=salesRepTotalSalesAmount;}
-    private void setSalesRepMonthlySales(double salesRepMonthlySales) { this.salesRepMonthlySales=salesRepMonthlySales;}
-    private void setSalesRepAnnualSales(double salesRepAnnualSales) {this.salesRepAnnualSales=salesRepAnnualSales;}
+    public String getSalesRepFullName() {return salesRepFullName;}
+    public String getSalesRepStaffID() {return salesRepStaffID;}
+    public String getSalesRepICNum() {return salesRepICNum;}
+    public String getSalesRepBankAcc() {return salesRepBankAcc;}
+    public int getSalesRepTotalSalesUnit() {return salesRepTotalSalesUnit;}
+    public double getSalesRepTotalSalesAmount() {return salesRepTotalSalesAmount;}
+    public double getSalesRepMonthlySales() {return salesRepMonthlySales;}
+    public double getSalesRepAnnualSales() {return salesRepAnnualSales;}
+    public void setSalesRepFullName(String salesRepFullName) {this.salesRepFullName=salesRepFullName;}
+    public void setSalesRepStaffID(String salesRepStaffID) {this.salesRepStaffID=salesRepStaffID;}
+    public void setSalesRepICNum(String salesRepICNum) {this.salesRepICNum=salesRepICNum;}
+    public void setSalesRepBankAcc(String salesRepBankAcc) {this.salesRepBankAcc=salesRepBankAcc;}
+    public void setSalesRepTotalSalesUnit(int salesRepTotalSalesUnit) {this.salesRepTotalSalesUnit=salesRepTotalSalesUnit;}
+    public void setSalesRepTotalSalesAmount(double salesRepTotalSalesAmount) {this.salesRepTotalSalesAmount=salesRepTotalSalesAmount;}
+    public void setSalesRepMonthlySales(double salesRepMonthlySales) { this.salesRepMonthlySales=salesRepMonthlySales;}
+    public void setSalesRepAnnualSales(double salesRepAnnualSales) {this.salesRepAnnualSales=salesRepAnnualSales;}
 }
 
 
