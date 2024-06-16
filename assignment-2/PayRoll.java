@@ -25,6 +25,10 @@ public class PayRoll {
             i[0]++;
         });
     }
+
+    public Salesman searchSalesRep(String staffNum) {
+        return salesRepInfo.get(staffNum);
+    }
 }
 
 

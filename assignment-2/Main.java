@@ -31,6 +31,29 @@ public class Main {
                     double totalSalesAmount=sc.nextDouble();
                     System.out.println("Number of Cars Sold:");
                     int numberOfCarsSold=sc.nextInt();
+
+                    Salesman salesman = new Salesman(fullName,staffNum,staffICNum,staffBankAccNo,numberOfCarsSold,totalSalesAmount,monthlySalary,annualSalary);
+                    payRollSys.insertSalesRep(salesman);
+                    break;
+                
+                case 2:
+                    System.out.println("Enter Staff Number to search: ");
+                    String searchStaffNum=sc.nextLine();
+                    Salesman searchedStaff=payRollSys.searchSalesRep(searchStaffNum);
+                    if(searchedStaff!=null) {
+                        System.out.println("Salesman found:");
+                        System.out.println(searchedStaff);
+                    }
+                    else {
+                        System.out.println("Salesman not found.");
+                    }
+                    break;
+
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
     }
 }
+
 
