@@ -12,12 +12,13 @@ public class Main {
             System.out.println("3. Reset System");
             System.out.println("4. Exit");
             int choice = sc.nextInt();
+            sc.nextLine();
 
             switch(choice) {
                 case 1: 
-                    System.out.println("Full Name: ");
+                    System.out.println("Full Name:");
                     String fullName=sc.nextLine();
-                    System.out.println("Staff Number: ");
+                    System.out.println("Staff Number:");
                     String staffNum=sc.nextLine();
                     System.out.println("Monthly Salary: ");
                     double monthlySalary=sc.nextDouble();

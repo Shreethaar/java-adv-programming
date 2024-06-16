@@ -25,6 +25,18 @@ public class Salesman {
     public void setSalesRepTotalSalesAmount(double salesRepTotalSalesAmount) {this.salesRepTotalSalesAmount=salesRepTotalSalesAmount;}
     public void setSalesRepMonthlySalary(double salesRepMonthlySalary) { this.salesRepMonthlySalary=salesRepMonthlySalary;}
     public void setSalesRepAnnualSalary(double salesRepAnnualSalary) {this.salesRepAnnualSalary=salesRepAnnualSalary;}
+    public String toString() {
+        return "Salesman{" +
+                "fullName='" + salesRepFullName+ '\'' +
+                ", staffNumber='" + salesRepStaffID + '\'' +
+                ", month='" + salesRepMonthlySalary + '\'' +
+                ", year=" + salesRepAnnualSalary +
+                ", icNumber='" + salesRepICNum + '\'' +
+                ", bankAccountNumber='" + salesRepBankAcc + '\'' +
+                ", totalSalesAmount=" + salesRepTotalSalesAmount +
+                ", numberOfCarsSold=" + salesRepTotalSalesUnit +
+                '}';
+    }
 }
 
 
