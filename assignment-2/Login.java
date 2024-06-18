@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 public class Login extends JFrame {
 
-    // Constructor to set up the GUI components
     public Login() {
         // Setting the title of the JFrame
         setTitle("Maju Auto Sales Sdn.Bhd. PayRoll System");
@@ -77,7 +76,7 @@ public class Login extends JFrame {
                 if (username.equals("admin") && password.equals("admin")) {
                     // If correct, show main application window
                     dispose(); // Close the login window
-                    showMainApplicationWindow(username); // Pass username to show welcome message and options
+                    new IndexGUI(username).setVisible(true);
                 } else {
                     // If incorrect, show an error message
                     JOptionPane.showMessageDialog(null, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -93,97 +92,6 @@ public class Login extends JFrame {
 
         // Setting the frame location to the center of the screen
         setLocationRelativeTo(null);
-    }
-
-    // Method to show the main application window after successful login
-    private void showMainApplicationWindow(String username) {
-        // Create a new JFrame for the main application
-        JFrame mainFrame = new JFrame("Main Application");
-
-        // Setting the default close operation to exit the application
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Setting the preferred size of the JFrame
-        mainFrame.setPreferredSize(new Dimension(600, 400));
-
-        // Creating a panel to hold main content
-        JPanel contentPanel = new JPanel(new BorderLayout());
-
-        // Creating a welcome message label
-        JLabel welcomeLabel = new JLabel("Welcome, " + username + "!", JLabel.CENTER);
-        welcomeLabel.setFont(new Font("Serif", Font.BOLD, 24));
-        contentPanel.add(welcomeLabel, BorderLayout.NORTH);
-
-        // Creating a panel for buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-
-        // Creating buttons for functionality
-        JButton insertButton = new JButton("Insert");
-        JButton viewButton = new JButton("View");
-        JButton searchButton = new JButton("Search");
-        JButton exitButton = new JButton("Exit");
-
-        // Adding buttons to the button panel
-        buttonPanel.add(insertButton);
-        buttonPanel.add(viewButton);
-        buttonPanel.add(searchButton);
-        buttonPanel.add(exitButton);
-
-        // Adding button panel to content panel
-        contentPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        // Adding content panel to main frame
-        mainFrame.add(contentPanel);
-
-        // Action listener for the insert button
-        insertButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainFrame, "Insert functionality to be implemented.");
-            }
-        });
-
-        // Action listener for the view button
-        viewButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainFrame, "View functionality to be implemented.");
-            }
-        });
-
-        // Action listener for the search button
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainFrame, "Search functionality to be implemented.");
-            }
-        });
-
-        // Action listener for the exit button
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Exit the application
-                System.exit(0);
-            }
-        });
-
-        // Setting the frame to be visible
-        mainFrame.pack();
-        mainFrame.setVisible(true);
-
-        // Setting the frame location to the center of the screen
-        mainFrame.setLocationRelativeTo(null);
-    }
-
-    public static void main(String[] args) {
-        // Running the GUI in the Event Dispatch Thread
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Login();
-            }
-        });
     }
 }
 

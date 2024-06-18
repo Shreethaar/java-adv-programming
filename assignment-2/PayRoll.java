@@ -2,7 +2,7 @@ import java.util.HashMap;import java.util.Map;
 public class PayRoll {
     private Map<String,Salesman> salesRepInfo;
     private PayRollCalculator1 payRollCalculator;
-    private salespersonDB salesDB;                      // complete db functions
+    private SalesPersonDB salesDB;                      // complete db functions
     public PayRoll() { salesRepInfo=new HashMap<>();  }
 
     public void insertSalesRep(Salesman saleRep) {
