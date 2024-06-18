@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class salespersonDB {
+public class SalesPersonDB {
     private static final String DB_URL = "jdbc:mariadb://localhost:3306/payroll_system";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "password";
