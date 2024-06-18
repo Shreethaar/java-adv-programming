@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class IndexGUI extends JFrame {
+    private PayRoll payRollSys;
 
     public IndexGUI(String username) {
         // Setting the title of the JFrame
@@ -48,7 +49,7 @@ public class IndexGUI extends JFrame {
         insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(IndexGUI.this, "Insert functionality to be implemented.");
+                new InsertGUI(payRollSys);
             }
         });
 
@@ -64,7 +65,7 @@ public class IndexGUI extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(IndexGUI.this, "Search functionality to be implemented.");
+                new InsertGUI(payRollSys);
             }
         });
 
@@ -72,7 +73,7 @@ public class IndexGUI extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Exit the application
+                // Exit the app
                 System.exit(0);
             }
         });

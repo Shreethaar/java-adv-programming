@@ -7,17 +7,17 @@ public class PayRoll {
 
     public void insertSalesRep(Salesman saleRep) {
         salesRepInfo.put(saleRep.getSalesRepStaffID(), saleRep);
-        // return success output message (SOP)
+        System.out.println("SalesRep " + saleRep.getSalesRepStaffID() + " inserted successfully.");
     }
 
     public void deleteSalesRep(Salesman saleRep) {
         salesRepInfo.remove(saleRep.getSalesRepStaffID());
-        // return success output message (SOP)
+        System.out.println("SalesRep " + saleRep.getSalesRepStaffID() + " deleted successfully.");
     }
 
     public void updateSalesRep(Salesman saleRep) {
         salesRepInfo.replace(saleRep.getSalesRepStaffID(), saleRep);
-        // return success output message (SOP)
+        System.out.println("SalesRep " + saleRep.getSalesRepStaffID() + " updated successfully.");
     }
 
     public void showAllInfoSalesRep() {
