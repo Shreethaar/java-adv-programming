@@ -1,0 +1,9 @@
+1. Login Page
+2. Main Menu Page
+3. Insert Page
+4. Search Page
+5. Display Info Page
+6. Edit Info Page
+7. Delete Info Page
+8. Generate Report Page 
+
