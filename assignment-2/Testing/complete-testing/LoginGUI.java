@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +9,7 @@ public class LoginGUI extends JFrame {
     private JPasswordField passText;
     private JButton loginButton;
     private JLabel errorLabel;
+    private JLabel successLabel;
 
     private LoginController controller;
 
@@ -18,7 +18,7 @@ public class LoginGUI extends JFrame {
 
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(300, 150));
+        setPreferredSize(new Dimension(300, 180));
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -42,6 +42,9 @@ public class LoginGUI extends JFrame {
 
         errorLabel = new JLabel();
         errorLabel.setForeground(Color.RED);
+
+        successLabel = new JLabel();
+        successLabel.setForeground(Color.GREEN);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -69,6 +72,11 @@ public class LoginGUI extends JFrame {
         gbc.gridwidth = 2;
         panel.add(errorLabel, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        panel.add(successLabel, gbc);
+
         add(panel);
         pack();
         setLocationRelativeTo(null);
@@ -79,18 +87,19 @@ public class LoginGUI extends JFrame {
         errorLabel.setText(message);
     }
 
+    public void showSuccessMessage(String message) {
+        successLabel.setText(message);
+    }
+
     public void clearFields() {
         userText.setText("");
         passText.setText("");
         errorLabel.setText("");
+        successLabel.setText("");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new LoginGUI(new LoginController());
-            }
-        });
+    public void clearPasswordField() {
+        passText.setText("");
     }
 }
 

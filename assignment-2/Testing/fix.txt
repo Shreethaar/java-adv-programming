@@ -1,0 +1,858 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseTest {
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/payroll_system";
+    private static final String DB_USER = "dbuser";
+    private static final String DB_PASSWORD = "password";
+
+    public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            if (conn != null) {
+                System.out.println("Connected to the PostgreSQL server successfully.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Connection failure.");
+            e.printStackTrace();
+        }
+    }
+}
+public class InsertController {
+    private PayRoll payRollSys;
+    private InsertGUI insertGUI;
+
+    public InsertController(PayRoll payRollSys) {
+        this.payRollSys = payRollSys;
+        this.insertGUI = new InsertGUI(this);
+    }
+
+    public void handleInsert(String fullName, String staffNum, String staffICNum, String staffBankAccNo,
+                             String monthlySalaryStr, String annualSalaryStr, String totalSalesAmountStr, String carsSoldStr) {
+        try {
+            // Parse the input values
+            double monthlySalary = Double.parseDouble(monthlySalaryStr);
+            double annualSalary = Double.parseDouble(annualSalaryStr);
+            double totalSalesAmount = Double.parseDouble(totalSalesAmountStr);
+            int carsSold = Integer.parseInt(carsSoldStr);
+
+            // Create a new Salesman object
+            Salesman salesman = new Salesman(fullName, staffNum, staffICNum, staffBankAccNo, carsSold, totalSalesAmount, monthlySalary, annualSalary);
+
+            // Insert the salesman into the PayRoll system
+            payRollSys.insertSalesRep(salesman);
+
+            // Clear the input fields
+            insertGUI.clearFields();
+
+            // Show success message
+            insertGUI.showOutput("Salesman added successfully.");
+        } catch (NumberFormatException ex) {
+            // Show error message if input is invalid
+            insertGUI.showOutput("Invalid input. Please check the data entered.");
+        }
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class InsertGUI extends JFrame {
+    private JTextField fullNameField;
+    private JTextField staffNumField;
+    private JTextField staffICNumField;
+    private JTextField staffBankAccNoField;
+    private JTextField monthlySalaryField;
+    private JTextField annualSalaryField;
+    private JTextField totalSalesAmountField;
+    private JTextField carsSoldField;
+    private JTextArea outputArea;
+    private JButton insertButton;
+
+    private InsertController insertController;
+
+    public InsertGUI(InsertController insertController) {
+        this.insertController = insertController;
+
+        // Setting the title of the JFrame
+        setTitle("Insert Salesman Information");
+
+        // Setting the default close operation to exit the application
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Setting the preferred size of the JFrame
+        setPreferredSize(new Dimension(400, 600));
+
+        // Creating a panel to hold main content
+        JPanel contentPanel = new JPanel(new GridLayout(10, 2, 10, 10));
+
+        // Creating and adding labels and text fields
+        contentPanel.add(new JLabel("Full Name:"));
+        fullNameField = new JTextField();
+        contentPanel.add(fullNameField);
+
+        contentPanel.add(new JLabel("Staff Number:"));
+        staffNumField = new JTextField();
+        contentPanel.add(staffNumField);
+
+        contentPanel.add(new JLabel("Staff IC Number:"));
+        staffICNumField = new JTextField();
+        contentPanel.add(staffICNumField);
+
+        contentPanel.add(new JLabel("Staff Bank Account Number:"));
+        staffBankAccNoField = new JTextField();
+        contentPanel.add(staffBankAccNoField);
+
+        contentPanel.add(new JLabel("Monthly Salary:"));
+        monthlySalaryField = new JTextField();
+        contentPanel.add(monthlySalaryField);
+
+        contentPanel.add(new JLabel("Annual Salary:"));
+        annualSalaryField = new JTextField();
+        contentPanel.add(annualSalaryField);
+
+        contentPanel.add(new JLabel("Total Sales Amount:"));
+        totalSalesAmountField = new JTextField();
+        contentPanel.add(totalSalesAmountField);
+
+        contentPanel.add(new JLabel("Cars Sold:"));
+        carsSoldField = new JTextField();
+        contentPanel.add(carsSoldField);
+
+        // Creating and adding the output area
+        outputArea = new JTextArea(5, 30);
+        outputArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(outputArea);
+
+        // Creating and adding the insert button
+        insertButton = new JButton("Insert");
+
+        // Adding components to the main panel
+        setLayout(new BorderLayout());
+        add(contentPanel, BorderLayout.CENTER);
+        add(insertButton, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.NORTH);
+
+        // Action listener for the insert button
+        insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                insertController.handleInsert(
+                        fullNameField.getText(),
+                        staffNumField.getText(),
+                        staffICNumField.getText(),
+                        staffBankAccNoField.getText(),
+                        monthlySalaryField.getText(),
+                        annualSalaryField.getText(),
+                        totalSalesAmountField.getText(),
+                        carsSoldField.getText()
+                );
+            }
+        });
+
+        // Setting the frame to be visible
+        pack();
+        setVisible(true);
+
+        // Setting the frame location to the center of the screen
+        setLocationRelativeTo(null);
+    }
+
+    public void showOutput(String message) {
+        outputArea.append(message + "\n");
+    }
+
+    public void clearFields() {
+        fullNameField.setText("");
+        staffNumField.setText("");
+        staffICNumField.setText("");
+        staffBankAccNoField.setText("");
+        monthlySalaryField.setText("");
+        annualSalaryField.setText("");
+        totalSalesAmountField.setText("");
+        carsSoldField.setText("");
+    }
+}
+
+import javax.swing.*;
+
+public class LoginController {
+    private LoginGUI loginGUI;
+
+    public LoginController() {
+        loginGUI = new LoginGUI(this);
+    }
+
+    public void handleLogin(String username, String password) {
+        // Check if the username and password are correct
+        if (username.equals("admin") && password.equals("admin")) {
+            // If correct, show main application window
+            loginGUI.dispose(); // Close the login window
+            
+            
+            // Launch main application window (MainApp)
+            SwingUtilities.invokeLater(() -> {
+                MainApp mainApp = new MainApp(payroll);
+                mainApp.setVisible(true);
+            });
+        } else {
+            // If incorrect, show an error message
+            loginGUI.showError("Invalid username or password.");
+        }
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class LoginGUI extends JFrame {
+
+    private JTextField userText;
+    private JPasswordField passText;
+    private JButton loginButton;
+    private JLabel errorLabel;
+
+    private LoginController controller;
+
+    public LoginGUI(LoginController controller) {
+        this.controller = controller;
+
+        setTitle("Login");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(300, 150));
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        JLabel userLabel = new JLabel("Username:");
+        userText = new JTextField(20);
+
+        JLabel passLabel = new JLabel("Password:");
+        passText = new JPasswordField(20);
+
+        loginButton = new JButton("Login");
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = userText.getText();
+                String password = new String(passText.getPassword());
+                controller.handleLogin(username, password);
+            }
+        });
+
+        errorLabel = new JLabel();
+        errorLabel.setForeground(Color.RED);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(userLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(userText, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(passLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(passText, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        panel.add(loginButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        panel.add(errorLabel, gbc);
+
+        add(panel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public void showError(String message) {
+        errorLabel.setText(message);
+    }
+
+    public void clearFields() {
+        userText.setText("");
+        passText.setText("");
+        errorLabel.setText("");
+    }
+
+  
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class MainApp extends JFrame {
+    private PayRoll payRollSys;
+
+    public MainApp(PayRoll payRollSys) {
+        this.payRollSys = payRollSys;
+
+        // Setting the title of the JFrame
+        setTitle("Maju Auto Sales Sdn.Bhd. PayRoll System");
+
+        // Setting the default close operation to exit the application
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Setting the preferred size of the JFrame
+        setPreferredSize(new Dimension(400, 300));
+
+        // Creating a panel to hold the main content
+        JPanel contentPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+
+        // Creating and adding buttons for different functionalities
+        JButton insertButton = new JButton("Insert Salesman");
+        JButton viewButton = new JButton("View Salesman");
+        JButton searchButton = new JButton("Search Salesman");
+
+        contentPanel.add(insertButton);
+        contentPanel.add(viewButton);
+        contentPanel.add(searchButton);
+
+        // Adding content panel to the frame
+        add(contentPanel, BorderLayout.CENTER);
+
+        // Setting the frame to be visible
+        pack();
+        setVisible(true);
+
+        // Setting the frame location to the center of the screen
+        setLocationRelativeTo(null);
+
+        // Action listener for the insert button
+        insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Launch the Insert GUI on the EDT
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        new InsertController(payRollSys);
+                    }
+                });
+            }
+        });
+
+        // Action listener for the view button
+        viewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Launch the View GUI on the EDT
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        new ViewController(payRollSys);
+                    }
+                });
+            }
+        });
+
+        // Action listener for the search button
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Launch the Search GUI on the EDT
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        new SearchController(payRollSys);
+                    }
+                });
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        // Initialize the PayRollSystem
+        PayRoll payRollSys = new PayRoll();
+
+        // Create and show the main application window on the EDT
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new MainApp(payRollSys);
+            }
+        });
+    }
+}
+import java.util.Scanner;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    LoginGUI loginGUI = new LoginGUI();
+    LoginController loginController = new LoginController(loginGUI);
+    loginGUI.setVisible(true);
+    Scanner scanner = new Scanner(System.in);
+
+    // Create instances of SalesPersonDB and PayRollCalculator1 (configure database connection details)
+    SalesPersonDB salespersonDB = new SalesPersonDB();
+    PayRollCalculator1 calculator = new PayRollCalculator1();
+
+    // Create PayRoll object with dependencies
+    PayRoll payroll = new PayRoll(salespersonDB, calculator);
+
+    int choice;
+
+    do {
+      System.out.println("\nPayroll System Menu");
+      System.out.println("1. Add Salesperson");
+      System.out.println("2. Calculate Salary");
+      System.out.println("3. View Salesperson Details"); // Optional functionality (refer to SalesPersonDB)
+      System.out.println("4. Sort Salesperson By Name");
+      System.out.println("5. Exit");
+      System.out.print("Enter your choice: ");
+
+      choice = scanner.nextInt();
+      scanner.nextLine(); // Consume newline character
+
+      switch (choice) {
+        case 1:
+          // Add salesperson details
+          String name = getStringValue(scanner, "Enter salesperson name: ");
+          String staffID = getStringValue(scanner, "Enter staff number: ");
+          String icNum = getStringValue(scanner, "Enter IC number: ");
+          String bankAcc = getStringValue(scanner, "Enter bank account number: ");
+          int totalSalesUnit = getIntValue(scanner, "Enter total number of cars sold: ");
+          double totalSalesAmount = getDoubleValue(scanner, "Enter total sales amount: ");
+          double monthlySalary = getDoubleValue(scanner, "Enter monthly salary: ");
+          double annualSalary = monthlySalary * 12; // Assuming annual salary is 12x monthly salary
+          Salesman newSalesperson = new Salesman(name, staffID, icNum, bankAcc, totalSalesUnit, totalSalesAmount, monthlySalary, annualSalary);
+          payroll.insertSalesRep(newSalesperson);
+          break;
+        case 2:
+          // Calculate salary
+          String staffIDToCalculate = getStringValue(scanner, "Enter staff number to calculate salary: ");
+          payroll.calculateSalary(staffIDToCalculate);
+          break;
+        case 3:
+          // View salesperson details (optional)
+          String staffIDToView = getStringValue(scanner, "Enter staff number to view details: ");
+          salespersonDB.viewSalesman(staffIDToView); // Modify for PayRoll method if implemented
+          break;
+        case 4:
+          // Sort salespeople by name
+          System.out.println("\nSalespeople sorted by name (alphabetical order):");
+          List<Salesman> sortedSalesmen = payroll.sortSalesRepName(); // Reusing the method for sorting
+          for (Salesman salesman : sortedSalesmen) {
+            System.out.println(salesman); // Leverage the toString() method in Salesman
+          }
+          break;
+        case 5:
+          System.out.println("Exiting Payroll System.");
+          break;
+        default:
+          System.out.println("Invalid choice. Please try again.");
+      }
+    } while (choice != 4);
+
+    scanner.close();
+  }
+
+  // Helper methods to get user input with validation
+  public static String getStringValue(Scanner scanner, String prompt) {
+    System.out.print(prompt);
+    return scanner.nextLine();
+  }
+
+  public static int getIntValue(Scanner scanner, String prompt) {
+    int value;
+    do {
+      System.out.print(prompt);
+      while (!scanner.hasNextInt()) {
+        System.out.println("Invalid input. Please enter an integer value.");
+        scanner.nextLine(); // Consume invalid input
+      }
+      value = scanner.nextInt();
+      scanner.nextLine(); // Consume newline character
+    } while (value <= 0);
+    return value;
+  }
+
+  public static double getDoubleValue(Scanner scanner, String prompt) {
+    double value;
+    do {
+      System.out.print(prompt);
+      while (!scanner.hasNextDouble()) {
+        System.out.println("Invalid input. Please enter a double value.");
+        scanner.nextLine(); // Consume invalid input
+      }
+      value = scanner.nextDouble();
+      scanner.nextLine(); // Consume newline character
+    } while (value <= 0);
+    return value;
+  }
+}
+import java.util.function.Function;
+
+public class PayRollCalculator1 {
+    double baseSalary = 1500;
+
+    Function<Double, Double> calcCarBodyCommission = totalCarsSoldAmount -> totalCarsSoldAmount * 0.01;
+
+    Function<Integer, Double> calcIncentiveCommission = numOfCarsSold -> {
+        if (numOfCarsSold >= 15) {
+            return 600.0;
+        } else if (numOfCarsSold >= 10) {
+            return 400.0;
+        } else if (numOfCarsSold >= 5) {
+            return 200.0;
+        } else {
+            return 0.0;
+        }
+    };
+
+    Function<Double, Double> calcIncomeTax = income -> {
+        if (income <= 416.67) {
+            return income * 0.0;
+        } else if (income <= 1666.67) {
+            return income * 0.01;
+        } else if (income <= 2916.67) {
+            return income * 0.03;
+        } else if (income <= 4166.67) {
+            return income * 0.08;
+        } else if (income <= 5833.33) {
+            return income * 0.13;
+        } else if (income <= 8333.33) {
+            return income * 0.21;
+        } else if (income <= 20833.33) {
+            return income * 0.24;
+        } else if (income <= 33333.33) {
+            return income * 0.245;
+        } else if (income <= 50000.00) {
+            return income * 0.25;
+        } else if (income <= 83333.33) {
+            return income * 0.26;
+        } else if (income <= 166666.67) {
+            return income * 0.28;
+        } else {
+            return income * 0.30;
+        }
+    };
+   interface TriFunction<A, B, C, R> {
+        R apply(A a, B b, C c);
+    }
+
+    TriFunction<Double, Integer, Double, Double> calculateTotalSalary = (totalCarsSoldAmount, numOfCarsSold, baseSalary) -> {
+        double commission = calcCarBodyCommission.apply(totalCarsSoldAmount);
+        double incentive = calcIncentiveCommission.apply(numOfCarsSold);
+        double grossSalary = baseSalary + commission + incentive;
+        double incomeTax = calcIncomeTax.apply(grossSalary);
+        double providentFund = grossSalary * 0.11; // 11% of gross salary
+        double netSalary = grossSalary - incomeTax - providentFund;
+        return netSalary;
+    };
+
+    
+}
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
+public class PayRoll {
+    private Map<String, Salesman> salesRepInfo;
+    private SalesPersonDB salespersonDB;
+    private PayRollCalculator1 calculator;
+
+    public PayRoll(SalesPersonDB salespersonDB, PayRollCalculator1 calculator) {
+        this.salesRepInfo = new HashMap<>();
+        this.salespersonDB = salespersonDB;
+        this.calculator = calculator;
+    }
+    
+    public void insertSalesRep(Salesman salesRep) {
+        salespersonDB.addSalesman(salesRep);
+        salesRepInfo.put(salesRep.getSalesRepStaffID(), salesRep);
+        System.out.println("Salesman " + salesRep.getSalesRepStaffID() + " inserted successfully.");
+    }
+
+    public void printSalesRepDetails() {
+        for (Salesman salesperson : salesRepInfo.values()) {
+            System.out.println(salesperson);
+        }
+    }
+
+    public void calculateSalary(String staffID) {
+        Salesman salesperson = salespersonDB.searchSalesman(staffID);
+        if (salesperson != null) {
+            double netSalary = calculator.calculateTotalSalary.apply(
+            salesperson.getSalesRepTotalSalesAmount(),
+            salesperson.getSalesRepTotalSalesUnit(),
+            calculator.baseSalary);
+      System.out.println("Staff Number: " + staffID);
+      System.out.println("Net Salary: $" + netSalary);
+    } 
+    else {
+      System.out.println("Salesperson with staff ID " + staffID + " not found.");
+    }
+  }
+
+  public List<Salesman> sortSalesRepName() {
+      List<Salesman> sortList = new ArrayList<>(salesRepInfo.values());
+      sortList.sort(new SalesmanComparator());
+      return sortList;
+  }
+    
+}
+
+import java.util.*;
+
+public class SalesmanComparator implements Comparator<Salesman> {
+    public int compare(Salesman salesman1, Salesman salesman2) {
+        return salesman1.getSalesRepFullName().compareToIgnoreCase(salesman2.getSalesRepFullName());
+    }
+}
+public class Salesman {
+    private String salesRepFullName;
+    private String salesRepStaffID;
+    private String salesRepICNum;
+    private String salesRepBankAcc;
+    private int salesRepTotalSalesUnit;         //total amount of cars sold (units)
+    private double salesRepTotalSalesAmount;    //total price of cars sold (sales)
+    private double salesRepMonthlySalary;
+    private double salesRepAnnualSalary;
+    public Salesman(String salesRepFullName, String salesRepStaffID, String salesRepICNum, String salesRepBankAcc, int salesRepTotalSalesUnit, double salesRepTotalSalesAmount, double salesRepMonthlySalary, double salesRepAnnualSalary) {this.setSalesRepFullName(salesRepFullName);this.setSalesRepStaffID(salesRepStaffID);this.setSalesRepICNum(salesRepICNum);this.setSalesRepBankAcc(salesRepBankAcc);this.setSalesRepTotalSalesUnit(salesRepTotalSalesUnit);this.setSalesRepTotalSalesAmount(salesRepTotalSalesAmount);this.setSalesRepMonthlySalary(salesRepMonthlySalary);this.setSalesRepAnnualSalary(salesRepAnnualSalary);
+    }
+    public String getSalesRepFullName() {return salesRepFullName;}
+    public String getSalesRepStaffID() {return salesRepStaffID;}
+    public String getSalesRepICNum() {return salesRepICNum;}
+    public String getSalesRepBankAcc() {return salesRepBankAcc;}
+    public int getSalesRepTotalSalesUnit() {return salesRepTotalSalesUnit;}
+    public double getSalesRepTotalSalesAmount() {return salesRepTotalSalesAmount;}
+    public double getSalesRepMonthlySalary() {return salesRepMonthlySalary;}
+    public double getSalesRepAnnualSalary() {return salesRepAnnualSalary;}
+    public void setSalesRepFullName(String salesRepFullName) {this.salesRepFullName=salesRepFullName;}
+    public void setSalesRepStaffID(String salesRepStaffID) {this.salesRepStaffID=salesRepStaffID;}
+    public void setSalesRepICNum(String salesRepICNum) {this.salesRepICNum=salesRepICNum;}
+    public void setSalesRepBankAcc(String salesRepBankAcc) {this.salesRepBankAcc=salesRepBankAcc;}
+    public void setSalesRepTotalSalesUnit(int salesRepTotalSalesUnit) {this.salesRepTotalSalesUnit=salesRepTotalSalesUnit;}
+    public void setSalesRepTotalSalesAmount(double salesRepTotalSalesAmount) {this.salesRepTotalSalesAmount=salesRepTotalSalesAmount;}
+    public void setSalesRepMonthlySalary(double salesRepMonthlySalary) { this.salesRepMonthlySalary=salesRepMonthlySalary;}
+    public void setSalesRepAnnualSalary(double salesRepAnnualSalary) {this.salesRepAnnualSalary=salesRepAnnualSalary;}
+    public String toString() {
+        return "Salesman{" +
+                "fullName='" + salesRepFullName+ '\'' +
+                ", staffNumber='" + salesRepStaffID + '\'' +
+                ", month='" + salesRepMonthlySalary + '\'' +
+                ", year=" + salesRepAnnualSalary +
+                ", icNumber='" + salesRepICNum + '\'' +
+                ", bankAccountNumber='" + salesRepBankAcc + '\'' +
+                ", totalSalesAmount=" + salesRepTotalSalesAmount +
+                ", numberOfCarsSold=" + salesRepTotalSalesUnit +
+                '}';
+    }
+}
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class SalesPersonDB {
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/payroll_system";
+    private static final String DB_USER = "dbuser";
+    private static final String DB_PASSWORD = "password";
+    
+    public Connection connect() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+    }
+    public void addSalesman(Salesman salesman) {
+        String query = "INSERT INTO salesmen (staffNumber, fullName, monthlySalary, annualSalary, icNumber, bankAccountNumber, totalSalesAmount, numberOfCarsSold) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, salesman.getSalesRepStaffID());
+            ps.setString(2, salesman.getSalesRepFullName());
+            ps.setDouble(3, salesman.getSalesRepMonthlySalary());
+            ps.setDouble(4, salesman.getSalesRepAnnualSalary());
+            ps.setString(5, salesman.getSalesRepICNum());
+            ps.setString(6, salesman.getSalesRepBankAcc());
+            ps.setDouble(7, salesman.getSalesRepTotalSalesAmount());
+            ps.setInt(8, salesman.getSalesRepTotalSalesUnit());
+            ps.executeUpdate();
+            System.out.println("Salesman information saved successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save salesman information.");
+        }
+    }
+
+    public Salesman searchSalesman(String staffNumber) {
+        String query = "SELECT * FROM salesmen WHERE staffNumber = ?";
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, staffNumber);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Salesman(
+                        rs.getString("fullName"),
+                        rs.getString("staffNumber"),
+                        rs.getString("icNumber"),
+                        rs.getString("bankAccountNumber"),
+                        rs.getInt("numberOfCarsSold"),
+                        rs.getDouble("totalSalesAmount"),
+                        rs.getDouble("monthlySalary"),
+                        rs.getDouble("annualSalary")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to search for salesman.");
+        }
+        return null;
+    }
+
+    public void viewSalesman(String staffNumber) {
+        Salesman salesman = searchSalesman(staffNumber);
+        if (salesman != null) {
+            System.out.println(salesman);
+        } else {
+            System.out.println("Salesman not found.");
+        }
+    }
+
+    public void editSalesman(Salesman salesman) {
+        String query = "UPDATE salesmen SET fullName = ?, monthlySalary = ?, annualSalary = ?, icNumber = ?, bankAccountNumber = ?, totalSalesAmount = ?, numberOfCarsSold = ? WHERE staffNumber = ?";
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, salesman.getSalesRepFullName());
+            ps.setDouble(2, salesman.getSalesRepMonthlySalary());
+            ps.setDouble(3, salesman.getSalesRepAnnualSalary());
+            ps.setString(4, salesman.getSalesRepICNum());
+            ps.setString(5, salesman.getSalesRepBankAcc());
+            ps.setDouble(6, salesman.getSalesRepTotalSalesAmount());
+            ps.setInt(7, salesman.getSalesRepTotalSalesUnit());
+            ps.setString(8, salesman.getSalesRepStaffID());
+            ps.executeUpdate();
+            System.out.println("Salesman information updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to update salesman information.");
+        }
+    }
+
+    public void deleteSalesman(String staffNumber) {
+        String query = "DELETE FROM salesmen WHERE staffNumber = ?";
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, staffNumber);
+            ps.executeUpdate();
+            System.out.println("Salesman deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to delete salesman.");
+        }
+    }
+
+    public void reset() {
+        String query = "DELETE FROM salesmen";
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(query);
+            System.out.println("System reset successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to reset system.");
+        }
+    }
+}
+
+
+public class SearchController {
+    private PayRoll payRollSys;
+    private SearchGUI searchGUI;
+
+    public SearchController(PayRoll payRollSys) {
+        this.payRollSys = payRollSys;
+        this.searchGUI = new SearchGUI(this);
+    }
+
+    public Salesman searchSalesRepByName(String name) {
+        return payRollSys.searchSalesRepByName(name);
+    }
+}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class SearchGUI extends JFrame {
+    private JTextField nameField;
+    private JTextArea outputArea;
+    private SearchController searchController;
+
+    public SearchGUI(SearchController searchController) {
+        this.searchController = searchController;
+
+        // Setting the title of the JFrame
+        setTitle("Search Salesman Information");
+
+        // Setting the default close operation to exit the application
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Setting the preferred size of the JFrame
+        setPreferredSize(new Dimension(400, 300));
+
+        // Creating a panel to hold the main content
+        JPanel contentPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+
+        // Creating and adding labels and text fields
+        contentPanel.add(new JLabel("Salesman Name:"));
+        nameField = new JTextField();
+        contentPanel.add(nameField);
+
+        // Creating and adding the output area
+        outputArea = new JTextArea(10, 30);
+        outputArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(outputArea);
+
+        // Creating and adding the search button
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchSalesman();
+            }
+        });
+
+        // Adding components to the main panel
+        setLayout(new BorderLayout());
+        add(contentPanel, BorderLayout.NORTH);
+        add(searchButton, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.SOUTH);
+
+        // Setting the frame to be visible
+        pack();
+        setVisible(true);
+
+        // Setting the frame location to the center of the screen
+        setLocationRelativeTo(null);
+    }
+
+    private void searchSalesman() {
+        String name = nameField.getText();
+        Salesman salesman = searchController.searchSalesRepByName(name);
+
+        if (salesman != null) {
+            outputArea.setText(salesman.toString());
+        } else {
+            outputArea.setText("Salesman not found.");
+        }
+    }
+}

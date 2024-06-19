@@ -4,6 +4,9 @@ import java.util.List;
 public class Main {
 
   public static void main(String[] args) {
+    LoginGUI loginGUI = new LoginGUI();
+    LoginController loginController = new LoginController(loginGUI);
+    loginGUI.setVisible(true);
     Scanner scanner = new Scanner(System.in);
 
     // Create instances of SalesPersonDB and PayRollCalculator1 (configure database connection details)

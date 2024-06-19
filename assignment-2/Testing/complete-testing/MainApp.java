@@ -79,16 +79,4 @@ public class MainApp extends JFrame {
             }
         });
     }
-
-    public static void main(String[] args) {
-        // Initialize the PayRollSystem
-        PayRoll payRollSys = new PayRoll();
-
-        // Create and show the main application window on the EDT
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new MainApp(payRollSys);
-            }
-        });
-    }
 }

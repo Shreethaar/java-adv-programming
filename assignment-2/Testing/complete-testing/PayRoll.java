@@ -46,6 +46,26 @@ public class PayRoll {
       sortList.sort(new SalesmanComparator());
       return sortList;
   }
-    
+
+  public Salesman searchSalesRepByName(String name) {
+        for (Salesman salesman : salesRepInfo.values()) {
+            if (salesman.getSalesRepName().equalsIgnoreCase(name)) {
+                return salesman;
+            }
+        }
+        return null; // Return null if no salesman with the given name is found
+    }
+
+    public String getSalesRepName(String staffID) {
+        Salesman salesperson = salesRepInfo.get(staffID);
+        if (salesperson != null) {
+            return salesperson.getSalesRepName();
+        }
+        return null; // Return null if salesperson with given staffID is not found
+    }
+
+    public List<Salesman> getAllSalesmen() {
+        return new ArrayList<>(salesRepInfo.values());
+    }
 }
 

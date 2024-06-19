@@ -7,7 +7,7 @@ public class SearchController {
         this.searchGUI = new SearchGUI(this);
     }
 
-    public Salesman searchSalesRepByName(String name) {
+    public Salesman searchSalesRepByName() {
         return payRollSys.searchSalesRepByName(name);
     }
 }
