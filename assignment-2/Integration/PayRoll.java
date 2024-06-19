@@ -1,54 +1,54 @@
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PayRoll {
     private Map<String, Salesman> salesRepInfo;
 
     public PayRoll() {
-        salesRepInfo = new HashMap<>();
+        // Initialize salesRepInfo map
+        // Example: salesRepInfo = new HashMap<>();
     }
 
-    public void insertSalesRep(Salesman salesRep) {
-        salesRepInfo.put(salesRep.getSalesRepStaffID(), salesRep);
-        System.out.println("Salesman " + salesRep.getSalesRepStaffID() + " inserted successfully.");
+    public void insertSalesRep(Salesman saleRep) {
+        salesRepInfo.put(saleRep.getSalesRepStaffID(), saleRep);
+        System.out.println("SalesRep " + saleRep.getSalesRepStaffID() + " inserted successfully.");
     }
 
-    public void deleteSalesRep(String staffNum) {
-        Salesman removedSalesman = salesRepInfo.remove(staffNum);
-        if (removedSalesman != null) {
-            System.out.println("Salesman " + staffNum + " deleted successfully.");
-        } else {
-            System.out.println("Salesman " + staffNum + " not found.");
-        }
+    public void deleteSalesRep(Salesman saleRep) {
+        salesRepInfo.remove(saleRep.getSalesRepStaffID());
+        System.out.println("SalesRep " + saleRep.getSalesRepStaffID() + " deleted successfully.");
     }
 
-    public void updateSalesRep(Salesman salesRep) {
-        if (salesRepInfo.containsKey(salesRep.getSalesRepStaffID())) {
-            salesRepInfo.put(salesRep.getSalesRepStaffID(), salesRep);
-            System.out.println("Salesman " + salesRep.getSalesRepStaffID() + " updated successfully.");
-        } else {
-            System.out.println("Salesman " + salesRep.getSalesRepStaffID() + " not found, cannot update.");
-        }
+    public void updateSalesRep(Salesman saleRep) {
+        salesRepInfo.replace(saleRep.getSalesRepStaffID(), saleRep);
+        System.out.println("SalesRep " + saleRep.getSalesRepStaffID() + " updated successfully.");
     }
 
-    public void showAllInfoSalesRep() {
-        System.out.println("All Salesmen Information:");
-        salesRepInfo.forEach((staffNum, salesman) -> {
-            System.out.println(staffNum + ": " + salesman);
-        });
+    public List<Salesman> getAllSalesmen() {
+        return new ArrayList<>(salesRepInfo.values());
     }
 
     public Salesman searchSalesRep(String staffNum) {
         return salesRepInfo.get(staffNum);
     }
 
-    // Getters and setters can be added as needed
-
-    public Map<String, Salesman> getSalesRepInfo() {
-        return salesRepInfo;
+    // Method to search sales rep by name
+    public List<Salesman> searchSalesRepByName(String name) {
+        List<Salesman> result = new ArrayList<>();
+        for (Salesman salesman : salesRepInfo.values()) {
+            if (salesman.getSalesRepFullName().equalsIgnoreCase(name)) {
+                result.add(salesman);
+            }
+        }
+        return result;
     }
 
-    public void setSalesRepInfo(Map<String, Salesman> salesRepInfo) {
-        this.salesRepInfo = salesRepInfo;
+    public void showAllInfoSalesRep() {
+        final int[] i = {1};
+        salesRepInfo.forEach((id, saleRep) -> {
+            System.out.println(i[0] + ": " + id + ", " + saleRep);
+            i[0]++;
+        });
     }
 }

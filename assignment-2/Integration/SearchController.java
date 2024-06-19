@@ -1,4 +1,3 @@
-
 public class SearchController {
     private PayRoll payRollSys;
     private SearchGUI searchGUI;
