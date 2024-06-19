@@ -13,12 +13,13 @@ public class InsertGUI extends JFrame {
     private JTextField totalSalesAmountField;
     private JTextField carsSoldField;
     private JTextArea outputArea;
+    private JButton insertButton;
 
-    private PayRoll payRollSys;
+    private InsertController insertController;
 
-    public InsertGUI(PayRoll payRollSys) {
-        this.payRollSys = payRollSys;
-        
+    public InsertGUI(InsertController insertController) {
+        this.insertController = insertController;
+
         // Setting the title of the JFrame
         setTitle("Insert Salesman Information");
 
@@ -70,19 +71,30 @@ public class InsertGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(outputArea);
 
         // Creating and adding the insert button
-        JButton insertButton = new JButton("Insert");
-        insertButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addSalesman();
-            }
-        });
+        insertButton = new JButton("Insert");
 
         // Adding components to the main panel
         setLayout(new BorderLayout());
         add(contentPanel, BorderLayout.CENTER);
         add(insertButton, BorderLayout.SOUTH);
         add(scrollPane, BorderLayout.NORTH);
+
+        // Action listener for the insert button
+        insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                insertController.handleInsert(
+                        fullNameField.getText(),
+                        staffNumField.getText(),
+                        staffICNumField.getText(),
+                        staffBankAccNoField.getText(),
+                        monthlySalaryField.getText(),
+                        annualSalaryField.getText(),
+                        totalSalesAmountField.getText(),
+                        carsSoldField.getText()
+                );
+            }
+        });
 
         // Setting the frame to be visible
         pack();
@@ -92,37 +104,18 @@ public class InsertGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void addSalesman() {
-        try {
-            // Get values from text fields
-            String fullName = fullNameField.getText();
-            String staffNum = staffNumField.getText();
-            String staffICNum = staffICNumField.getText();
-            String staffBankAccNo = staffBankAccNoField.getText();
-            double monthlySalary = Double.parseDouble(monthlySalaryField.getText());
-            double annualSalary = Double.parseDouble(annualSalaryField.getText());
-            double totalSalesAmount = Double.parseDouble(totalSalesAmountField.getText());
-            int carsSold = Integer.parseInt(carsSoldField.getText());
+    public void showOutput(String message) {
+        outputArea.append(message + "\n");
+    }
 
-            // Create salesman object and add to PayRoll
-            Salesman salesman = new Salesman(fullName, staffNum, staffICNum, staffBankAccNo,
-                    carsSold, totalSalesAmount, monthlySalary, annualSalary);
-
-            payRollSys.insertSalesRep(salesman);
-
-            // Clear text fields after successful addition
-            fullNameField.setText("");
-            staffNumField.setText("");
-            staffICNumField.setText("");
-            staffBankAccNoField.setText("");
-            monthlySalaryField.setText("");
-            annualSalaryField.setText("");
-            totalSalesAmountField.setText("");
-            carsSoldField.setText("");
-
-            outputArea.append("Salesman added successfully.\n");
-        } catch (NumberFormatException ex) {
-            outputArea.append("Invalid input. Please check the data entered.\n");
-        }
+    public void clearFields() {
+        fullNameField.setText("");
+        staffNumField.setText("");
+        staffICNumField.setText("");
+        staffBankAccNoField.setText("");
+        monthlySalaryField.setText("");
+        annualSalaryField.setText("");
+        totalSalesAmountField.setText("");
+        carsSoldField.setText("");
     }
 }

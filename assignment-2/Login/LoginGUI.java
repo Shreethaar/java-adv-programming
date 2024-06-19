@@ -3,9 +3,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Login extends JFrame {
+public class LoginGUI extends JFrame {
+    private JTextField userText;
+    private JPasswordField passText;
+    private JButton loginButton;
+    private Login loginController;
 
-    public Login() {
+    public LoginGUI(Login loginController) {
+        this.loginController = loginController;
+
         // Setting the title of the JFrame
         setTitle("Maju Auto Sales Sdn.Bhd. PayRoll System");
 
@@ -29,14 +35,14 @@ public class Login extends JFrame {
 
         // Creating and setting up the username label and text field
         JLabel userLabel = new JLabel("Username:");
-        JTextField userText = new JTextField(20);
+        userText = new JTextField(20);
 
         // Creating and setting up the password label and password field
         JLabel passLabel = new JLabel("Password:");
-        JPasswordField passText = new JPasswordField(20);
+        passText = new JPasswordField(20);
 
         // Creating the login button
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
 
         // Adding the username label and text field to the panel
         gbc.gridx = 0;
@@ -69,18 +75,7 @@ public class Login extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = userText.getText();
-                String password = new String(passText.getPassword());
-
-                // Check if the username and password are correct
-                if (username.equals("admin") && password.equals("admin")) {
-                    // If correct, show main application window
-                    dispose(); // Close the login window
-                    new IndexGUI(username).setVisible(true);
-                } else {
-                    // If incorrect, show an error message
-                    JOptionPane.showMessageDialog(null, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                loginController.handleLogin(userText.getText(), new String(passText.getPassword()));
             }
         });
 
@@ -93,5 +88,13 @@ public class Login extends JFrame {
         // Setting the frame location to the center of the screen
         setLocationRelativeTo(null);
     }
-}
 
+    public void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void clearFields() {
+        userText.setText("");
+        passText.setText("");
+    }
+}
