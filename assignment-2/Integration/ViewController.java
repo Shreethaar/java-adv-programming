@@ -1,4 +1,4 @@
-import java.util.Map;
+import java.util.List;
 
 public class ViewController {
     private PayRoll payRollSys;
@@ -9,8 +9,8 @@ public class ViewController {
         this.viewGUI = new ViewGUI(this);
     }
 
-    public Map<String, Salesman> getAllSalesmen() {
-        return payRollSys.getSalesRepInfo();
+    public List<Salesman> getAllSalesmen() {
+        return payRollSys.getAllSalesmen();
     }
 }
 
