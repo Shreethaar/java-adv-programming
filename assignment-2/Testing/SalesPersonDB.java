@@ -1,14 +1,18 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SalesPersonDB {
-    private static final String DB_URL = "jdbc:mariadb://localhost:3306/payroll_system";
-    private static final String DB_USER = "root";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/payroll_system";
+    private static final String DB_USER = "dbuser";
     private static final String DB_PASSWORD = "password";
-
+    
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
-
     public void addSalesman(Salesman salesman) {
         String query = "INSERT INTO salesmen (staffNumber, fullName, monthlySalary, annualSalary, icNumber, bankAccountNumber, totalSalesAmount, numberOfCarsSold) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = connect();
@@ -109,4 +113,5 @@ public class SalesPersonDB {
         }
     }
 }
+
 

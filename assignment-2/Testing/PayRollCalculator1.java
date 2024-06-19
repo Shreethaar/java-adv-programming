@@ -58,15 +58,5 @@ public class PayRollCalculator1 {
         return netSalary;
     };
 
-    public static void main(String[] args) {
-        PayRollCalculator1 calculator = new PayRollCalculator1();
-
-        // Example usage:
-        double totalCarsSoldAmount = 25000.0; // Example value
-        int numOfCarsSold = 12; // Example value
-
-        double netSalary = calculator.calculateTotalSalary.apply(totalCarsSoldAmount, numOfCarsSold, calculator.baseSalary);
-
-        System.out.println("Net Salary: $" + netSalary);
-    }
+    
 }
