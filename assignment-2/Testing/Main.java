@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.List;
 
 public class Main {
 
@@ -19,7 +20,8 @@ public class Main {
       System.out.println("1. Add Salesperson");
       System.out.println("2. Calculate Salary");
       System.out.println("3. View Salesperson Details"); // Optional functionality (refer to SalesPersonDB)
-      System.out.println("4. Exit");
+      System.out.println("4. Sort Salesperson By Name");
+      System.out.println("5. Exit");
       System.out.print("Enter your choice: ");
 
       choice = scanner.nextInt();
@@ -50,6 +52,14 @@ public class Main {
           salespersonDB.viewSalesman(staffIDToView); // Modify for PayRoll method if implemented
           break;
         case 4:
+          // Sort salespeople by name
+          System.out.println("\nSalespeople sorted by name (alphabetical order):");
+          List<Salesman> sortedSalesmen = payroll.sortSalesRepName(); // Reusing the method for sorting
+          for (Salesman salesman : sortedSalesmen) {
+            System.out.println(salesman); // Leverage the toString() method in Salesman
+          }
+          break;
+        case 5:
           System.out.println("Exiting Payroll System.");
           break;
         default:

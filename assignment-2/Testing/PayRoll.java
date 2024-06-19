@@ -1,5 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PayRoll {
     private Map<String, Salesman> salesRepInfo;
@@ -37,6 +39,12 @@ public class PayRoll {
     else {
       System.out.println("Salesperson with staff ID " + staffID + " not found.");
     }
+  }
+
+  public List<Salesman> sortSalesRepName() {
+      List<Salesman> sortList = new ArrayList<>(salesRepInfo.values());
+      sortList.sort(new SalesmanComparator());
+      return sortList;
   }
     
 }
