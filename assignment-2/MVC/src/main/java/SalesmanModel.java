@@ -20,6 +20,9 @@ public class SalesmanModel {
     private double grossSalary;
     private double netSalary;
 
+    public SalesmanModel() {
+    }
+
     public SalesmanModel(String salesmanFullName, String salesmanStaffID, String salesmanICNum, String salesmanBankAcc, int salesmanTotalSalesUnit, double salesmanTotalSalesAmount, YearMonth salaryMonth, Year salaryYear, String salesmanBankInfo) {
         this.salesmanFullName = salesmanFullName;
         this.salesmanStaffID = salesmanStaffID;
