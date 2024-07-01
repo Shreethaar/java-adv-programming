@@ -1,110 +1,83 @@
-import java.time.Year;
-import java.time.YearMonth;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class PayrollSystemController {
+    private PayrollSystemGUI view;
     private SalesmanDatabaseModel model;
-    private PayRollSystemGUI view;
 
-    public PayrollSystemController(PayrollSystemGUI view, SalesmanDatabaseModel dbModel) {
-        this.view=view;
-        this.dbModel=dbModel;
-        initView();
-
+    public PayrollSystemController(PayrollSystemGUI view, SalesmanDatabaseModel model) {
+        this.view = view;
+        this.model = model;
+    }
+    
+    public void addButtonActionPerformed(ActionEvent e) {
+        SalesmanModel salesman = new SalesmanModel(
+            view.getNameField(),
+            view.getStaffNumberField(),
+            view.getIcNumberField(),
+            view.getBankAccField(),
+            Double.parseDouble(view.getTotalSalesField()),
+            Integer.parseInt(view.getSalesUnitField()),
+            Integer.parseInt(view.getSalaryMonthField()),
+            Integer.parseInt(view.getSalaryYearField())
+        );
+        model.addSalesman(salesman);
+        view.updateTable();
+        view.displayMessage("Salesman added successfully.");
+        view.clearFields();
     }
 
-    private void initView() {
-        view.getAddButton().addActionListener(e -> addSalesman());
-        view.getSearchButton().addActionListener(e -> searchSalesman());
-        view.getUpdateButton().addActionListener(e -> deleteSalesman());
-        view.getResetButton().addActionListener(e -> resetSystem());
-
-    }
-
-    private void addSalesman() {
-        String fullName = view.getNameField().getText().trim();
-        String staffNumber = view.getNameField().getText().trim();
-        String icNumber = view.getIcNumberField().getText().trim();
-        String bankAcc = view.getBankAccField().getText().trim();
-        String totalSalesAmountStr = view.getTotalSalesField().getText().trim();
-        String salesUnitStr = view.getSalesUnitField().getText().trim();
-        String salaryMonthStr = view.getSalaryMonthField().getText().trim();
-        String salaryYearStr = view.getSalaryYearField().getText().trim();
-
-        try {
-            double totalSalesAmount = Double.parseDouble(totalSalesAmountStr);
-            int salesUnit = Integer.parseInt(salesUnitStr);
-            int salaryMonth = Integer.parseInt(salaryMonthStr);
-            int salaryYear = Integer.parseInt(salaryYearStr);
-
-            YearMonth salaryMonthObj = YearMonth.of(salaryYear, salaryMonth);
-            Year salaryYearObj = Year.of(salaryYear);
-
-            SalesmanModel newSalesman = new SalesmanModel(fullName, staffNumber, icNumber, bankAcc, salesUnit, totalSalesAmount, salaryMonthObj, salaryYearObj, "");
-            dbModel.addSalesman(newSalesman);
-
-            view.displayMessage("Salesman added successfully.");
-        } catch (NumberFormatException e) {
-            view.displayMessage("Please enter valid numbers for Total Sales Amount, Number of Cars Sold, Salary Month, and Salary Year.");
-        }
-    }
-
-    private void searchSalesman() {
-        String staffNumber = view.getStaffNumberField().getText().trim();
-        SalesmanModel foundSalesman = dbModel.searchSalesman(staffNumber);
-
-        if (foundSalesman != null) {
-            view.getNameField().setText(foundSalesman.getSalesmanFullName());
-            view.getIcNumberField().setText(foundSalesman.getSalesmanICNum());
-            view.getBankAccField().setText(foundSalesman.getSalesmanBankAcc());
-            view.getTotalSalesField().setText(String.valueOf(foundSalesman.getSalesmanTotalSalesAmount()));
-            view.getSalesUnitField().setText(String.valueOf(foundSalesman.getSalesmanTotalSalesUnit()));
-            view.getSalaryMonthField().setText(String.valueOf(foundSalesman.getSalaryMonth().getMonthValue()));
-            view.getSalaryYearField().setText(String.valueOf(foundSalesman.getSalaryYear().getValue()));
-            view.displayMessage("Salesman found.");
-        } else {
+    public void updateButtonActionPerformed(ActionEvent e) {
+        SalesmanModel salesman = model.searchSalesmanByName(view.getNameField());
+        if (salesman != null) {
+            salesman.setStaffNumber(view.getStaffNumberField());
+            salesman.setIcNumber(view.getIcNumberField());
+            salesman.setBankAcc(view.getBankAccField());
+            salesman.setTotalSales(Double.parseDouble(view.getTotalSalesField()));
+            salesman.setCarsSold(Integer.parseInt(view.getSalesUnitField()));
+            salesman.setSalaryMonth(Integer.parseInt(view.getSalaryMonthField()));
+            salesman.setSalaryYear(Integer.parseInt(view.getSalaryYearField()));
+            
+            model.updateSalesman(salesman);
+            view.updateTable();
+            view.displayMessage("Salesman data updated successfully.");
             view.clearFields();
+        } else {
             view.displayMessage("Salesman not found.");
         }
     }
 
-    private void updateSalesman() {
-        String fullName = view.getNameField().getText().trim();
-        String staffNumber = view.getStaffNumberField().getText().trim();
-        String icNumber = view.getIcNumberField().getText().trim();
-        String bankAcc = view.getBankAccField().getText().trim();
-        String totalSalesAmountStr = view.getTotalSalesField().getText().trim();
-        String salesUnitStr = view.getSalesUnitField().getText().trim();
-        String salaryMonthStr = view.getSalaryMonthField().getText().trim();
-        String salaryYearStr = view.getSalaryYearField().getText().trim();
-
-        try {
-            double totalSalesAmount = Double.parseDouble(totalSalesAmountStr);
-            int salesUnit = Integer.parseInt(salesUnitStr);
-            int salaryMonth = Integer.parseInt(salaryMonthStr);
-            int salaryYear = Integer.parseInt(salaryYearStr);
-
-            YearMonth salaryMonthObj = YearMonth.of(salaryYear, salaryMonth);
-            Year salaryYearObj = Year.of(salaryYear);
-
-            SalesmanModel updatedSalesman = new SalesmanModel(fullName, staffNumber, icNumber, bankAcc, salesUnit, totalSalesAmount, salaryMonthObj, salaryYearObj, "");
-            dbModel.editSalesman(updatedSalesman);
-
-            view.displayMessage("Salesman updated successfully.");
-        } catch (NumberFormatException e) {
-            view.displayMessage("Please enter valid numbers for Total Sales Amount, Number of Cars Sold, Salary Month, and Salary Year.");
+    public void deleteButtonActionPerformed(ActionEvent e) {
+        if (model.deleteSalesman(view.getNameField())) {
+            view.updateTable();
+            view.displayMessage("Salesman deleted successfully.");
+            view.clearFields();
+        } else {
+            view.displayMessage("Salesman not found.");
         }
     }
 
-    private void deleteSalesman() {
-        String staffNumber = view.getStaffNumberField().getText().trim();
-        dbModel.deleteSalesman(staffNumber);
+    public void resetButtonActionPerformed(ActionEvent e) {
         view.clearFields();
-        view.displayMessage("Salesman deleted successfully.");
     }
 
-    private void resetSystem() {
-        dbModel.reset();
-        view.clearFields();
-        view.displayMessage("System reset successfully.");
+    public DefaultTableModel getTableModel() {
+        String[] columnNames = {"Name", "Staff Number", "IC Number", "Bank Account", "Total Sales", "Cars Sold", "Salary Month", "Salary Year"};
+        List<SalesmanModel> salesmen = model.getAllSalesmen();
+        Object[][] data = new Object[salesmen.size()][8];
+        for (int i = 0; i < salesmen.size(); i++) {
+            SalesmanModel salesman = salesmen.get(i);
+            data[i][0] = salesman.getName();
+            data[i][1] = salesman.getStaffNumber();
+            data[i][2] = salesman.getIcNumber();
+            data[i][3] = salesman.getBankAcc();
+            data[i][4] = salesman.getTotalSales();
+            data[i][5] = salesman.getCarsSold();
+            data[i][6] = salesman.getSalaryMonth();
+            data[i][7] = salesman.getSalaryYear();
+        }
+        return new DefaultTableModel(data, columnNames);
     }
 }

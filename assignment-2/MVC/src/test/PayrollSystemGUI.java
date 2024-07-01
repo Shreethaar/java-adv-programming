@@ -1,77 +1,153 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class PayrollSystemGUI extends JFrame {
     // GUI components declaration
     private JLabel nameLabel, staffNumberLabel, icNumberLabel, bankAccLabel, totalSalesLabel, salesUnitLabel, salaryMonthLabel, salaryYearLabel, messageLabel;
     private JTextField nameField, staffNumberField, icNumberField, bankAccField, totalSalesField, salesUnitField, salaryMonthField, salaryYearField;
-    private JButton addButton, searchButton, updateButton, deleteButton, resetButton;
+    private JButton addButton, searchButton, updateButton, deleteButton, resetButton, generateReportButton, exitSystemButton;
+    private JTable salesmanTable;
+    private DefaultTableModel tableModel;
 
     public PayrollSystemGUI() {
         // GUI setup
         setTitle("Payroll System");
-        setSize(500, 400);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(10, 2, 10, 10));
+        setLayout(new GridBagLayout());
 
         // Initialize GUI components
         nameLabel = new JLabel("Full Name:");
-        add(nameLabel);
-        nameField = new JTextField();
-        add(nameField);
+        nameField = new JTextField(20);
 
         staffNumberLabel = new JLabel("Staff Number:");
-        add(staffNumberLabel);
-        staffNumberField = new JTextField();
-        add(staffNumberField);
+        staffNumberField = new JTextField(20);
 
         icNumberLabel = new JLabel("IC Number:");
-        add(icNumberLabel);
-        icNumberField = new JTextField();
-        add(icNumberField);
+        icNumberField = new JTextField(20);
 
         bankAccLabel = new JLabel("Bank Account Number:");
-        add(bankAccLabel);
-        bankAccField = new JTextField();
-        add(bankAccField);
+        bankAccField = new JTextField(20);
 
         totalSalesLabel = new JLabel("Total Sales Amount:");
-        add(totalSalesLabel);
-        totalSalesField = new JTextField();
-        add(totalSalesField);
+        totalSalesField = new JTextField(20);
 
         salesUnitLabel = new JLabel("Number of Cars Sold:");
-        add(salesUnitLabel);
-        salesUnitField = new JTextField();
-        add(salesUnitField);
+        salesUnitField = new JTextField(20);
 
         salaryMonthLabel = new JLabel("Salary Month:");
-        add(salaryMonthLabel);
-        salaryMonthField = new JTextField();
-        add(salaryMonthField);
+        salaryMonthField = new JTextField(20);
 
         salaryYearLabel = new JLabel("Salary Year:");
-        add(salaryYearLabel);
-        salaryYearField = new JTextField();
-        add(salaryYearField);
+        salaryYearField = new JTextField(20);
 
         addButton = new JButton("Add");
-        add(addButton);
-
         searchButton = new JButton("Search");
-        add(searchButton);
-
         updateButton = new JButton("Update");
-        add(updateButton);
-
         deleteButton = new JButton("Delete");
-        add(deleteButton);
-
         resetButton = new JButton("Reset");
-        add(resetButton);
+        generateReportButton = new JButton("Generate Report");
+        exitSystemButton = new JButton("Exit");
 
         messageLabel = new JLabel("");
-        add(messageLabel);
+        messageLabel.setForeground(Color.RED);
+
+        // JTable setup
+        String[] columnNames = {"Full Name", "Staff Number", "IC Number", "Bank Account", "Total Sales", "Cars Sold", "Salary Month", "Salary Year"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        salesmanTable = new JTable(tableModel);
+        JScrollPane tableScrollPane = new JScrollPane(salesmanTable);
+
+        // Layout setup
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(nameLabel, gbc);
+        gbc.gridx = 1;
+        add(nameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(staffNumberLabel, gbc);
+        gbc.gridx = 1;
+        add(staffNumberField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        add(icNumberLabel, gbc);
+        gbc.gridx = 1;
+        add(icNumberField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        add(bankAccLabel, gbc);
+        gbc.gridx = 1;
+        add(bankAccField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        add(totalSalesLabel, gbc);
+        gbc.gridx = 1;
+        add(totalSalesField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        add(salesUnitLabel, gbc);
+        gbc.gridx = 1;
+        add(salesUnitField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        add(salaryMonthLabel, gbc);
+        gbc.gridx = 1;
+        add(salaryMonthField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        add(salaryYearLabel, gbc);
+        gbc.gridx = 1;
+        add(salaryYearField, gbc);
+
+        // Adding buttons in separate rows
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(addButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        add(searchButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(updateButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        add(deleteButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(resetButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 11;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(messageLabel, gbc);
+
+        // Add the table at the bottom
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        add(tableScrollPane, gbc);
 
         setVisible(true);
     }
@@ -129,12 +205,27 @@ public class PayrollSystemGUI extends JFrame {
         return resetButton;
     }
 
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public JButton getExitButton() {
+        return exitSystemButton;
+    }
+
+    public JButton getGenerateReportButton() {
+        return getGenerateReportButton;
+    }
+
     public void clearFields() {
         nameField.setText("");
         staffNumberField.setText("");
         icNumberField.setText("");
         bankAccField.setText("");
         totalSalesField.setText("");
+        salesUnitField.setText("");
+        salaryMonthField.setText("");
+        salaryYearField.setText("");
     }
 
     public void displayMessage(String message) {
@@ -147,3 +238,4 @@ public class PayrollSystemGUI extends JFrame {
         new PayrollSystemController(view, dbModel);
     }
 }
+
