@@ -3,59 +3,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Assignment2 {
-    private String fullName;
-    private String staffNumber;
-    private String monthYear;
-    private String icNumber;
-    private String bankAccountNumber;
-    private double totalCarSales;
-    private int numberOfCarsSold;
+public class SalesmanView {
 
-    private static final double BASIC_SALARY = 1500;
-    private static final double EPF_RATE = 0.11;
-    private static final double TAX_RATE = 0.05;
-
-    public Assignment2(String fullName, String staffNumber, String monthYear, String icNumber, String bankAccountNumber, double totalCarSales, int numberOfCarsSold) {
-        this.fullName = fullName;
-        this.staffNumber = staffNumber;
-        this.monthYear = monthYear;
-        this.icNumber = icNumber;
-        this.bankAccountNumber = bankAccountNumber;
-        this.totalCarSales = totalCarSales;
-        this.numberOfCarsSold = numberOfCarsSold;
-    }
-
-    public double calculateCarBodyCommission() {
-        return 0.01 * totalCarSales;
-    }
-
-    public double calculateIncentiveCommission() {
-        if (numberOfCarsSold >= 5 && numberOfCarsSold <= 9) {
-            return 200 * numberOfCarsSold;
-        } else if (numberOfCarsSold >= 10 && numberOfCarsSold <= 14) {
-            return 400 * numberOfCarsSold;
-        } else if (numberOfCarsSold > 14) {
-            return 600 * numberOfCarsSold;
-        }
-        return 0;
-    }
-
-    public double calculateGrossSalary() {
-        return BASIC_SALARY + calculateCarBodyCommission() + calculateIncentiveCommission();
-    }
-
-    public double calculateEPF() {
-        return calculateGrossSalary() * EPF_RATE;
-    }
-
-    public double calculateIncomeTax() {
-        return calculateGrossSalary() * TAX_RATE;
-    }
-
-    public double calculateNetSalary() {
-        return calculateGrossSalary() - calculateEPF() - calculateIncomeTax();
-    }
+    private static SalesmanDatabaseModel dbModel = new SalesmanDatabaseModel();
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Employee Salary Calculator");
@@ -133,7 +83,7 @@ public class Assignment2 {
         panel.add(calculateButton);
 
         // Table to display the results
-        String[] columnNames = {"Full Name", "Staff Number", "Month Year", "IC Number", "Bank Account Number", "Gross Salary", "EPF", "Income Tax", "Net Salary"};
+        String[] columnNames = {"Full Name", "Staff Number", "IC Number", "Bank Account Number", "Gross Salary", "EPF", "Income Tax", "Net Salary"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -162,21 +112,22 @@ public class Assignment2 {
             public void actionPerformed(ActionEvent e) {
                 String empName = nameText.getText();
                 String empID = idText.getText();
-                String empMonthYear = monthYearText.getText();
                 String empICNUM = icNumberText.getText();
                 String empBankNum = bankAccountNumberText.getText();
                 double empCarSales = Double.parseDouble(totalCarSalesText.getText());
                 int empCarAmount = Integer.parseInt(numberOfCarsSoldText.getText());
 
-                Assignment2 employee = new Assignment2(empName, empID, empMonthYear, empICNUM, empBankNum, empCarSales, empCarAmount);
+                SalesmanModel employee = new SalesmanModel(empName, empID, empBankNum, empICNUM, empCarSales, empCarAmount);
+                employee.calculateGrossSalary();
+                employee.calculateEPF();
+                employee.calculateIncomeTax();
+                employee.calculateNetSalary();
 
-                double grossSalary = employee.calculateGrossSalary();
-                double epf = employee.calculateEPF();
-                double incomeTax = employee.calculateIncomeTax();
-                double netSalary = employee.calculateNetSalary();
+                // Add employee to the database
+                dbModel.addSalesman(employee);
 
                 // Update the table with the calculated values
-                Object[] row = {empName, empID, empMonthYear, empICNUM, empBankNum, String.format("%.2f", grossSalary), String.format("%.2f", epf), String.format("%.2f", incomeTax), String.format("%.2f", netSalary)};
+                Object[] row = {empName, empID, empICNUM, empBankNum, String.format("%.2f", employee.getSalesmanGrossSalary()), String.format("%.2f", employee.getSalesmanEPF()), String.format("%.2f", employee.getSalesmanIncomeTax()), String.format("%.2f", employee.getSalesmanNetSalary())};
                 model.addRow(row);
             }
         });
@@ -185,11 +136,15 @@ public class Assignment2 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchTextValue = searchText.getText().toLowerCase();
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    String name = table.getValueAt(i, 0).toString().toLowerCase();
-                    String id = table.getValueAt(i, 1).toString().toLowerCase();
-                    if (name.contains(searchTextValue) || id.contains(searchTextValue)) {
-                        table.setRowSelectionInterval(i, i);
+                for (SalesmanModel salesman : dbModel.getAllSalesmen()) {
+                    if (salesman.getSalesmanFullName().toLowerCase().contains(searchTextValue) || salesman.getSalesmanStaffID().toLowerCase().contains(searchTextValue)) {
+                        // Select row in the table
+                        for (int i = 0; i < table.getRowCount(); i++) {
+                            if (table.getValueAt(i, 0).equals(salesman.getSalesmanFullName()) && table.getValueAt(i, 1).equals(salesman.getSalesmanStaffID())) {
+                                table.setRowSelectionInterval(i, i);
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
@@ -201,6 +156,10 @@ public class Assignment2 {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
+                    String staffID = model.getValueAt(selectedRow, 1).toString();
+                    // Remove employee from the database
+                    dbModel.deleteSalesman(staffID);
+                    // Remove row from the table
                     model.removeRow(selectedRow);
                 }
             }
