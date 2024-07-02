@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Year;
 import java.time.YearMonth;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SalesmanDatabaseModel {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/payroll_system";
@@ -109,5 +111,34 @@ public class SalesmanDatabaseModel {
             e.printStackTrace();
             System.out.println("Failed to reset system.");
         }
+    }
+    public List<SalesmanModel> getAllSalesmen() {
+        List<SalesmanModel> salesmen = new ArrayList<>();
+        String query = "SELECT * FROM salesmen";
+        try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            while(rs.next()) {
+                YearMonth salaryMonth = YearMonth.of(rs.getInt("salaryYear"),rs.getInt("salaryMonth"));
+                Year salaryYear = Year.of(rs.getInt("salaryYear"));
+                SalesmanModel salesman = new SalesmanModel(
+                        rs.getString("fullName"),
+                        rs.getString("staffNumber"),
+                        rs.getString("icNumber"),
+                        rs.getString("bankAccountNumber"),
+                        rs.getInt("numberOfCarsSold"),
+                        rs.getDouble("totalSalesAmount"),
+                        salaryMonth,
+                        salaryYear,
+                        ""
+                        );
+                salesmen.add(salesman);
+            }
+                }
+            catch(SQLException e) {
+                e.printStackTrace();
+                System.out.println("Failed to retrive salesmen.");
+            }
+
     }
 }

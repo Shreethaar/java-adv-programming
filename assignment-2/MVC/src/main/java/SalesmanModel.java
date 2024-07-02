@@ -35,6 +35,21 @@ public class SalesmanModel {
         this.salesmanBankInfo = salesmanBankInfo;
         calculateAll();
     }
+    public SalesmanModel(String salesmanFullName, String salesmanStaffID, String salesmanICNum, String salesmanBankAcc, int salesmanTotalSalesUnit, double salesmanTotalSalesAmount, YearMonth salaryMonth, Year salaryYear, double grossSalary, double incomeTax, double epf, double netSalary) {
+        this.salesmanFullName = salesmanFullName;
+        this.salesmanStaffID = salesmanStaffID;
+        this.salesmanICNum = salesmanICNum;
+        this.salesmanBankAcc = salesmanBankAcc;
+        this.salesmanTotalSalesUnit = salesmanTotalSalesUnit;
+        this.salesmanTotalSalesAmount = salesmanTotalSalesAmount;
+        this.salaryMonth = salaryMonth;
+        this.salaryYear = salaryYear;
+        this.grossSalary = grossSalary;
+        this.monthlyIncomeTax = incomeTax;
+        this.epf = epf;
+        this.netSalary = netSalary;
+        calculateAll();
+    }
 
     public String getSalesmanFullName() { return salesmanFullName; }
     public String getSalesmanStaffID() { return salesmanStaffID; }

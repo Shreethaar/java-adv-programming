@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.time.YearMonth;
+import javax.swing.table.DefaultTableModel;
 
 public class SalesmanView extends JFrame {
 
@@ -37,10 +38,13 @@ public class SalesmanView extends JFrame {
     private JButton clearButton;
     private JTextArea messageArea;
 
+    private JTable salesmanTable;
+    private DefaultTableModel tableModel;
+
     public SalesmanView() {
         super("Salesman Salary System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 600);
+        this.setSize(1100, 700);
         this.setLayout(null);
 
         initComponents();
@@ -87,6 +91,12 @@ salaryMonthComboBox = new JComboBox<>(months);
         clearButton = new JButton("Clear");
         messageArea = new JTextArea(5, 40);
         messageArea.setEditable(false);
+
+        String[] columnNames={"Staff Number","Full Name","IC Number","Bank Account","Total Sales Unit","Total Sales Amount", "Salary Month", "Salary Year", "Gross Salary","Income Tax", "EPF", "Net Salary"};
+        tableModel=new DefaultTableModel(columnNames,0);
+        JScrollPane tableScrollPane=new JScrollPane(salesmanTable);
+        add(tableScrollPane);
+
     }
 
     private void initLayout() {
@@ -312,24 +322,60 @@ salaryMonthComboBox = new JComboBox<>(months);
         salaryYearField.setText(String.valueOf(salaryYear));
     }
 
+   public double getGrossSalary() {
+        return Double.parseDouble(grossSalaryField.getText());
+    }
+
     public void setGrossSalary(double grossSalary) {
-        grossSalaryField.setText(String.valueOf(grossSalary));
+        grossSalaryField.setText(Double.toString(grossSalary));
+    }
+
+    public double getMonthlyIncomeTax() {
+        return Double.parseDouble(incomeTaxField.getText());
     }
 
     public void setMonthlyIncomeTax(double monthlyIncomeTax) {
-        incomeTaxField.setText(String.valueOf(monthlyIncomeTax));
+        incomeTaxField.setText(Double.toString(monthlyIncomeTax));
+    }
+
+    public double getEPF() {
+        return Double.parseDouble(epfField.getText());
     }
 
     public void setEPF(double epf) {
-        epfField.setText(String.valueOf(epf));
+        epfField.setText(Double.toString(epf));
+    }
+
+    public double getNetSalary() {
+        return Double.parseDouble(netSalaryField.getText());
     }
 
     public void setNetSalary(double netSalary) {
-        netSalaryField.setText(String.valueOf(netSalary));
+        netSalaryField.setText(Double.toString(netSalary));
     }
 
     public void showMessage(String message) {
         messageArea.setText(message);
-        messageArea.append("\n"); // Add newline after each message
+    }
+
+    public void addRowToTable(SalesmanModel salesman) {
+        Object[] rowData = {
+            salesman.getSalesmanStaffID(),
+            salesman.getSalesmanFullName(),
+            salesman.getSalesmanICNum(),
+            salesman.getSalesmanBankAcc(),
+            salesman.getSalesmanTotalSalesUnit(),
+            salesman.getSalesmanTotalSalesAmount(),
+            salesman.getSalaryMonth(),
+            salesman.getSalaryYear(),
+            salesman.getGrossSalary(),
+            salesman.getMonthlyIncomeTax(),
+            salesman.getEPF(),
+            salesman.getNetSalary()
+        };
+    }
+
+    public void clearTable() {
+        tableModel.setRowCount(0);
     }
 }
