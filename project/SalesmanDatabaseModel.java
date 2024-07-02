@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.TreeSet;
 
 public class SalesmanDatabaseModel {
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/payroll_system";
-    private static final String DB_USER = "dbuser";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/salesmen";
+    private static final String DB_USER = "trevorphilips";
     private static final String DB_PASSWORD = "password";
 
     private TreeSet<SalesmanModel> salesmenSet;
