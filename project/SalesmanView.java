@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.TreeSet;
@@ -21,67 +22,68 @@ public class SalesmanView {
     }
 
     private static void placeComponents(JPanel panel) {
-        panel.setLayout(null);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JLabel nameLabel = new JLabel("Employee Name:");
-        nameLabel.setBounds(10, 20, 160, 25);
-        panel.add(nameLabel);
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel titleLabel = new JLabel("Employee Salary Calculator");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
+        titlePanel.add(titleLabel);
+        panel.add(titlePanel);
 
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new GridLayout(7, 2, 10, 10));
+
+        JLabel nameLabel = new JLabel("Employee Name:", JLabel.CENTER);
+        formPanel.add(nameLabel);
         JTextField nameText = new JTextField(20);
-        nameText.setBounds(180, 20, 165, 25);
-        panel.add(nameText);
+        formPanel.add(nameText);
 
-        JLabel idLabel = new JLabel("Employee ID:");
-        idLabel.setBounds(10, 50, 160, 25);
-        panel.add(idLabel);
-
+        JLabel idLabel = new JLabel("Employee ID:", JLabel.CENTER);
+        formPanel.add(idLabel);
         JTextField idText = new JTextField(20);
-        idText.setBounds(180, 50, 165, 25);
-        panel.add(idText);
+        formPanel.add(idText);
 
-        JLabel monthYearLabel = new JLabel("Month Year:");
-        monthYearLabel.setBounds(10, 80, 160, 25);
-        panel.add(monthYearLabel);
-
+        JLabel monthYearLabel = new JLabel("Month Year:", JLabel.CENTER);
+        formPanel.add(monthYearLabel);
         JTextField monthYearText = new JTextField(20);
-        monthYearText.setBounds(180, 80, 165, 25);
-        panel.add(monthYearText);
+        formPanel.add(monthYearText);
 
-        JLabel icNumberLabel = new JLabel("IC Number:");
-        icNumberLabel.setBounds(10, 110, 160, 25);
-        panel.add(icNumberLabel);
-
+        JLabel icNumberLabel = new JLabel("IC Number:", JLabel.CENTER);
+        formPanel.add(icNumberLabel);
         JTextField icNumberText = new JTextField(20);
-        icNumberText.setBounds(180, 110, 165, 25);
-        panel.add(icNumberText);
+        formPanel.add(icNumberText);
 
-        JLabel bankAccountNumberLabel = new JLabel("Bank Account Number:");
-        bankAccountNumberLabel.setBounds(10, 140, 160, 25);
-        panel.add(bankAccountNumberLabel);
-
+        JLabel bankAccountNumberLabel = new JLabel("Bank Account Number:", JLabel.CENTER);
+        formPanel.add(bankAccountNumberLabel);
         JTextField bankAccountNumberText = new JTextField(20);
-        bankAccountNumberText.setBounds(180, 140, 165, 25);
-        panel.add(bankAccountNumberText);
+        formPanel.add(bankAccountNumberText);
 
-        JLabel totalCarSalesLabel = new JLabel("Total Car Sales:");
-        totalCarSalesLabel.setBounds(10, 170, 160, 25);
-        panel.add(totalCarSalesLabel);
-
+        JLabel totalCarSalesLabel = new JLabel("Total Car Sales:", JLabel.CENTER);
+        formPanel.add(totalCarSalesLabel);
         JTextField totalCarSalesText = new JTextField(20);
-        totalCarSalesText.setBounds(180, 170, 165, 25);
-        panel.add(totalCarSalesText);
+        formPanel.add(totalCarSalesText);
 
-        JLabel numberOfCarsSoldLabel = new JLabel("Number of Cars Sold:");
-        numberOfCarsSoldLabel.setBounds(10, 200, 160, 25);
-        panel.add(numberOfCarsSoldLabel);
-
+        JLabel numberOfCarsSoldLabel = new JLabel("Number of Cars Sold:", JLabel.CENTER);
+        formPanel.add(numberOfCarsSoldLabel);
         JTextField numberOfCarsSoldText = new JTextField(20);
-        numberOfCarsSoldText.setBounds(180, 200, 165, 25);
-        panel.add(numberOfCarsSoldText);
+        formPanel.add(numberOfCarsSoldText);
 
+        panel.add(formPanel);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton calculateButton = new JButton("Calculate Salary");
-        calculateButton.setBounds(10, 230, 160, 25);
-        panel.add(calculateButton);
+        buttonPanel.add(calculateButton);
+
+        JButton resetButton = new JButton("Reset");
+        buttonPanel.add(resetButton);
+
+        JButton exitButton = new JButton("Exit");
+        buttonPanel.add(exitButton);
+
+        JButton sortButton = new JButton("Sort By Name");
+        buttonPanel.add(sortButton);
+
+        panel.add(buttonPanel);
 
         TreeSet<SalesmanModel> salesmanSet = new TreeSet<>(new SalesmanNameComparator());
 
@@ -90,60 +92,56 @@ public class SalesmanView {
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 270, 760, 150);
         panel.add(scrollPane);
 
         // Add search and delete components
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JLabel searchLabel = new JLabel("Search (Name/ID):");
-        searchLabel.setBounds(10, 430, 160, 25);
-        panel.add(searchLabel);
-
+        searchPanel.add(searchLabel);
         JTextField searchText = new JTextField(20);
-        searchText.setBounds(180, 430, 165, 25);
-        panel.add(searchText);
+        searchPanel.add(searchText);
 
         JButton searchButton = new JButton("Search");
-        searchButton.setBounds(350, 430, 100, 25);
-        panel.add(searchButton);
+        searchPanel.add(searchButton);
 
         JButton deleteButton = new JButton("Delete Selected Row");
-        deleteButton.setBounds(460, 430, 160, 25);
-        panel.add(deleteButton);
-        
-        JButton resetButton = new JButton("Reset");
-        resetButton.setBounds(180, 230, 100, 25);
-        panel.add(resetButton);
+        searchPanel.add(deleteButton);
 
-        JButton exitButton = new JButton("Exit");
-        exitButton.setBounds(290, 230, 100, 25);
-        panel.add(exitButton);
-
-        JButton sortButton = new JButton("Sort By Name");
-        sortButton.setBounds(400, 230, 150, 25);
-        panel.add(sortButton);
+        panel.add(searchPanel);
 
         calculateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String empName = nameText.getText();
-                String empID = idText.getText();
-                String empICNUM = icNumberText.getText();
-                String empBankNum = bankAccountNumberText.getText();
-                double empCarSales = Double.parseDouble(totalCarSalesText.getText());
-                int empCarAmount = Integer.parseInt(numberOfCarsSoldText.getText());
+                try {
+                    String empName = nameText.getText();
+                    String empID = idText.getText();
+                    String empICNUM = icNumberText.getText();
+                    String empBankNum = bankAccountNumberText.getText();
+                    double empCarSales = Double.parseDouble(totalCarSalesText.getText());
+                    int empCarAmount = Integer.parseInt(numberOfCarsSoldText.getText());
 
-                SalesmanModel employee = new SalesmanModel(empName, empID, empBankNum, empICNUM, empCarSales, empCarAmount);
-                employee.calculateGrossSalary();
-                employee.calculateEPF();
-                employee.calculateIncomeTax();
-                employee.calculateNetSalary();
+                    if (empCarSales < 0 || empCarAmount < 0) {
+                        throw new IllegalArgumentException("Sales amounts cannot be negative.");
+                    }
 
-                // Add employee to the database
-                dbModel.addSalesman(employee);
+                    SalesmanModel employee = new SalesmanModel(empName, empID, empBankNum, empICNUM, empCarSales, empCarAmount);
+                    employee.calculateGrossSalary();
+                    employee.calculateEPF();
+                    employee.calculateIncomeTax();
+                    employee.calculateNetSalary();
 
-                // Update the table with the calculated values
-                Object[] row = {empName, empID, empICNUM, empBankNum, String.format("%.2f", employee.getSalesmanGrossSalary()), String.format("%.2f", employee.getSalesmanEPF()), String.format("%.2f", employee.getSalesmanIncomeTax()), String.format("%.2f", employee.getSalesmanNetSalary())};
-                model.addRow(row);
+                    // Add employee to the database
+                    dbModel.addSalesman(employee);
+                    salesmanSet.add(employee);
+
+                    // Update the table with the calculated values
+                    Object[] row = {empName, empID, empICNUM, empBankNum, String.format("%.2f", employee.getSalesmanGrossSalary()), String.format("%.2f", employee.getSalesmanEPF()), String.format("%.2f", employee.getSalesmanIncomeTax()), String.format("%.2f", employee.getSalesmanNetSalary())};
+                    model.addRow(row);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(panel, "Please enter valid numbers for car sales and number of cars sold.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -153,7 +151,6 @@ public class SalesmanView {
                 String searchTextValue = searchText.getText().toLowerCase();
                 for (SalesmanModel salesman : dbModel.getAllSalesmen()) {
                     if (salesman.getSalesmanFullName().toLowerCase().contains(searchTextValue) || salesman.getSalesmanStaffID().toLowerCase().contains(searchTextValue)) {
-                        // Select row in the table
                         for (int i = 0; i < table.getRowCount(); i++) {
                             if (table.getValueAt(i, 0).equals(salesman.getSalesmanFullName()) && table.getValueAt(i, 1).equals(salesman.getSalesmanStaffID())) {
                                 table.setRowSelectionInterval(i, i);
@@ -172,13 +169,12 @@ public class SalesmanView {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
                     String staffID = model.getValueAt(selectedRow, 1).toString();
-                    // Remove employee from the database
                     dbModel.deleteSalesman(staffID);
-                    // Remove row from the table
                     model.removeRow(selectedRow);
                 }
             }
         });
+
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -204,14 +200,11 @@ public class SalesmanView {
         sortButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Clear the table model
                 model.setRowCount(0);
-                // Repopulate the table with sorted data
                 for (SalesmanModel employee : salesmanSet) {
                     Object[] row = {
                         employee.getSalesmanFullName(),
                         employee.getSalesmanStaffID(),
-                        "", // Month Year is not stored in the model, you can add it if needed
                         employee.getSalesmanICNum(),
                         employee.getSalesmanBankAcc(),
                         String.format("%.2f", employee.getSalesmanGrossSalary()),
