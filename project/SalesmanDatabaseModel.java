@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.TreeSet;
+import java.util.Collections;
 
 public class SalesmanDatabaseModel {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/salesmen";
@@ -131,5 +132,9 @@ public class SalesmanDatabaseModel {
             System.out.println("Failed to retrieve salesmen.");
         }
         return salesmenSet;
+    }
+
+    public TreeSet<SalesmanModel> getSortedSalesmenNames() {
+        return new TreeSet<>(salesmenSet);
     }
 }
