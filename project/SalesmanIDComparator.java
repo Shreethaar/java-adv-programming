@@ -5,4 +5,3 @@ public class SalesmanIDComparator implements Comparator<SalesmanModel> {
         return s1.getSalesmanStaffID().compareTo(s2.getSalesmanStaffID());
     }
 }
-
