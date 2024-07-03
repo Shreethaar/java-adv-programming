@@ -10,7 +10,7 @@ public class SalesmanView {
     private static SalesmanDatabaseModel dbModel = new SalesmanDatabaseModel();
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Employee Salary Calculator");
+        JFrame frame = new JFrame("Maju Auto Sales Sdn.Bhd Salesman Payroll System");
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -25,7 +25,7 @@ public class SalesmanView {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel titleLabel = new JLabel("Employee Salary Calculator");
+        JLabel titleLabel = new JLabel("Salesman PayRoll System");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
         titlePanel.add(titleLabel);
         panel.add(titlePanel);
@@ -33,12 +33,12 @@ public class SalesmanView {
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridLayout(7, 2, 10, 10));
 
-        JLabel nameLabel = new JLabel("Employee Name:", JLabel.CENTER);
+        JLabel nameLabel = new JLabel("Salesman Name:", JLabel.CENTER);
         formPanel.add(nameLabel);
         JTextField nameText = new JTextField(20);
         formPanel.add(nameText);
 
-        JLabel idLabel = new JLabel("Employee ID:", JLabel.CENTER);
+        JLabel idLabel = new JLabel("Salesman ID:", JLabel.CENTER);
         formPanel.add(idLabel);
         JTextField idText = new JTextField(20);
         formPanel.add(idText);
@@ -80,12 +80,16 @@ public class SalesmanView {
         JButton exitButton = new JButton("Exit");
         buttonPanel.add(exitButton);
 
-        JButton sortButton = new JButton("Sort By Name");
-        buttonPanel.add(sortButton);
+        JButton sortNameButton = new JButton("Sort By Name");
+        buttonPanel.add(sortNameButton);
+
+        JButton sortIDButton = new JButton("Sort By ID");
+        buttonPanel.add(sortIDButton);
 
         panel.add(buttonPanel);
 
-        TreeSet<SalesmanModel> salesmanSet = new TreeSet<>(new SalesmanNameComparator());
+        TreeSet<SalesmanModel> salesmanNameSortSet = new TreeSet<>(new SalesmanNameComparator());
+        TreeSet<SalesmanModel> salesmanIDSortSet = new TreeSet<>(new SalesmanIDComparator());
 
         // Table to display the results
         String[] columnNames = {"Full Name", "Staff Number", "IC Number", "Bank Account Number", "Gross Salary", "EPF", "Income Tax", "Net Salary"};
@@ -132,7 +136,7 @@ public class SalesmanView {
 
                     // Add employee to the database
                     dbModel.addSalesman(employee);
-                    salesmanSet.add(employee);
+                    salesmanNameSortSet.add(employee);
 
                     // Update the table with the calculated values
                     Object[] row = {empName, empID, empICNUM, empBankNum, String.format("%.2f", employee.getSalesmanGrossSalary()), String.format("%.2f", employee.getSalesmanEPF()), String.format("%.2f", employee.getSalesmanIncomeTax()), String.format("%.2f", employee.getSalesmanNetSalary())};
@@ -197,11 +201,11 @@ public class SalesmanView {
             }
         });
 
-        sortButton.addActionListener(new ActionListener() {
+        sortNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
-                for (SalesmanModel employee : salesmanSet) {
+                for (SalesmanModel employee : salesmanNameSortSet) {
                     Object[] row = {
                         employee.getSalesmanFullName(),
                         employee.getSalesmanStaffID(),
@@ -216,5 +220,24 @@ public class SalesmanView {
                 }
             }
         });
+
+        sortIDButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.setRowCount(0);
+                for (SalesmanModel employee : salesmanNameSortSet) {
+                    Object[] row = {
+                        employee.getSalesmanFullName(),
+                        employee.getSalesmanStaffID(),
+                        employee.getSalesmanICNum(),
+                        employee.getSalesmanBankAcc(),
+                        String.format("%.2f", employee.getSalesmanGrossSalary()),
+                        String.format("%.2f", employee.getSalesmanEPF()),
+                        String.format("%.2f", employee.getSalesmanIncomeTax()),
+                        String.format("%.2f", employee.getSalesmanNetSalary())
+                    };
+                    model.addRow(row);
+                }
+            }
+        });                    
     }
 }

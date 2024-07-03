@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.TreeSet;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 
 public class SalesmanDatabaseModel {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/salesmen";
@@ -34,10 +35,10 @@ public class SalesmanDatabaseModel {
             ps.setDouble(5, salesman.getSalesmanTotalSalesAmount());
             ps.setInt(6, salesman.getSalesmanTotalSalesUnit());
             ps.executeUpdate();
-            System.out.println("Salesman information saved successfully.");
+            JOptionPane.showMessageDialog(null,"Salesman information saved successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to save salesman information.");
+            JOptionPane.showMessageDialog(null,"Failed to save salesman information.");
         }
     }
 
@@ -60,7 +61,7 @@ public class SalesmanDatabaseModel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to search for salesman.");
+            JOptionPane.showMessageDialog(null,"Failed to search for salesman.");
         }
         return null;
     }
@@ -75,10 +76,10 @@ public class SalesmanDatabaseModel {
             ps.setInt(5, salesman.getSalesmanTotalSalesUnit());
             ps.setString(6, salesman.getSalesmanStaffID());
             ps.executeUpdate();
-            System.out.println("Salesman information updated successfully.");
+            JOptionPane.showMessageDialog(null,"Salesman information updated successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to update salesman information.");
+            JOptionPane.showMessageDialog(null,"Failed to update salesman information.");
         }
     }
     public void deleteSalesman(String staffID) {
@@ -89,10 +90,10 @@ public class SalesmanDatabaseModel {
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, staffID);
             ps.executeUpdate();
-            System.out.println("Salesman deleted successfully.");
+            JOptionPane.showMessageDialog(null,"Salesman deleted successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to delete salesman.");
+            JOptionPane.showMessageDialog(null,"Failed to delete salesman.");
         }
     }
 
@@ -103,10 +104,10 @@ public class SalesmanDatabaseModel {
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(query);
-            System.out.println("System reset successfully.");
+            JOptionPane.showMessageDialog(null,"System reset successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to reset system.");
+            JOptionPane.showMessageDialog(null,"Failed to reset system.");
         }
     }
 
@@ -129,12 +130,16 @@ public class SalesmanDatabaseModel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to retrieve salesmen.");
+            JOptionPane.showMessageDialog(null,"Failed to retrieve salesmen.");
         }
         return salesmenSet;
     }
 
     public TreeSet<SalesmanModel> getSortedSalesmenNames() {
-        return new TreeSet<>(salesmenSet);
+        return new TreeSet<>(new SalesmanNameComparator());
+    }
+
+    public TreeSet<SalesmanModel> getSortedSalesmenStaffID() {
+        return new TreeSet<>(new SalesmanIDComparator());
     }
 }
