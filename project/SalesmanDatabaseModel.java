@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.TreeSet;
-import java.util.Collections;
 import javax.swing.JOptionPane;
 
 public class SalesmanDatabaseModel {
@@ -13,18 +12,11 @@ public class SalesmanDatabaseModel {
     private static final String DB_USER = "trevorphilips";
     private static final String DB_PASSWORD = "password";
 
-    private TreeSet<SalesmanModel> salesmenSet;
-    public SalesmanDatabaseModel() {
-        salesmenSet = new TreeSet<>(new SalesmanNameComparator());
-    }
-
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
     public void addSalesman(SalesmanModel salesman) {
-        salesmenSet.add(salesman);
-
         String query = "INSERT INTO salesmen (salesmanFullName, salesmanStaffID, salesmanICNum, salesmanBankAcc, salesmanTotalSalesAmount, salesmanTotalSalesUnit) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = connect();
              PreparedStatement ps = conn.prepareStatement(query)) {
@@ -43,7 +35,7 @@ public class SalesmanDatabaseModel {
     }
 
     public SalesmanModel searchSalesman(String staffID) {
-       String query = "SELECT * FROM salesmen WHERE salesmanStaffID = ?";
+        String query = "SELECT * FROM salesmen WHERE salesmanStaffID = ?";
         try (Connection conn = connect();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, staffID);
@@ -65,6 +57,7 @@ public class SalesmanDatabaseModel {
         }
         return null;
     }
+
     public void editSalesman(SalesmanModel salesman) {
         String query = "UPDATE salesmen SET salesmanFullName = ?, salesmanICNum = ?, salesmanBankAcc = ?, salesmanTotalSalesAmount = ?, salesmanTotalSalesUnit = ? WHERE salesmanStaffID = ?";
         try (Connection conn = connect();
@@ -82,9 +75,8 @@ public class SalesmanDatabaseModel {
             JOptionPane.showMessageDialog(null,"Failed to update salesman information.");
         }
     }
-    public void deleteSalesman(String staffID) {
-        salesmenSet.removeIf(s -> s.getSalesmanStaffID().equals(staffID));
 
+    public void deleteSalesman(String staffID) {
         String query = "DELETE FROM salesmen WHERE salesmanStaffID = ?";
         try (Connection conn = connect();
              PreparedStatement ps = conn.prepareStatement(query)) {
@@ -98,8 +90,6 @@ public class SalesmanDatabaseModel {
     }
 
     public void reset() {
-        salesmenSet.clear();
-
         String query = "DELETE FROM salesmen";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -112,7 +102,7 @@ public class SalesmanDatabaseModel {
     }
 
     public TreeSet<SalesmanModel> getAllSalesmen() {
-        salesmenSet.clear();
+        TreeSet<SalesmanModel> salesmenSet = new TreeSet<>(new SalesmanIDComparator());
         String query = "SELECT * FROM salesmen";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -136,10 +126,15 @@ public class SalesmanDatabaseModel {
     }
 
     public TreeSet<SalesmanModel> getSortedSalesmenNames() {
-        return new TreeSet<>(new SalesmanNameComparator());
+        TreeSet<SalesmanModel> sortedSalesmen = new TreeSet<>(new SalesmanNameComparator());
+        sortedSalesmen.addAll(getAllSalesmen());
+        return sortedSalesmen;
     }
 
     public TreeSet<SalesmanModel> getSortedSalesmenStaffID() {
-        return new TreeSet<>(new SalesmanIDComparator());
+        TreeSet<SalesmanModel> sortedSalesmen = new TreeSet<>(new SalesmanIDComparator());
+        sortedSalesmen.addAll(getAllSalesmen());
+        return sortedSalesmen;
     }
 }
+

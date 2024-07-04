@@ -200,12 +200,31 @@ public class SalesmanView {
                 System.exit(0);
             }
         });
-
         sortNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
-                for (SalesmanModel employee : salesmanNameSortSet) {
+                TreeSet<SalesmanModel> sortedByName = dbModel.getSortedSalesmenNames();
+                for (SalesmanModel employee : sortedByName) {
+                    Object[] row = {
+                    employee.getSalesmanFullName(),
+                    employee.getSalesmanStaffID(),
+                    employee.getSalesmanICNum(),
+                    employee.getSalesmanBankAcc(),
+                    String.format("%.2f", employee.getSalesmanGrossSalary()),
+                    String.format("%.2f", employee.getSalesmanEPF()),
+                    String.format("%.2f", employee.getSalesmanIncomeTax()),
+                    String.format("%.2f", employee.getSalesmanNetSalary())
+                    };
+                    model.addRow(row);
+                }
+            }
+        });
+        sortIDButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.setRowCount(0);
+                TreeSet<SalesmanModel> sortedByID = dbModel.getSortedSalesmenStaffID();
+                for (SalesmanModel employee : sortedByID) {
                     Object[] row = {
                         employee.getSalesmanFullName(),
                         employee.getSalesmanStaffID(),
@@ -220,24 +239,7 @@ public class SalesmanView {
                 }
             }
         });
-
-        sortIDButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                model.setRowCount(0);
-                for (SalesmanModel employee : salesmanNameSortSet) {
-                    Object[] row = {
-                        employee.getSalesmanFullName(),
-                        employee.getSalesmanStaffID(),
-                        employee.getSalesmanICNum(),
-                        employee.getSalesmanBankAcc(),
-                        String.format("%.2f", employee.getSalesmanGrossSalary()),
-                        String.format("%.2f", employee.getSalesmanEPF()),
-                        String.format("%.2f", employee.getSalesmanIncomeTax()),
-                        String.format("%.2f", employee.getSalesmanNetSalary())
-                    };
-                    model.addRow(row);
-                }
-            }
-        });                    
     }
 }
+
+     
