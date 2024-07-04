@@ -17,23 +17,31 @@ public class SalesmanDatabaseModel {
     }
 
     public void addSalesman(SalesmanModel salesman) {
-        String query = "INSERT INTO salesmen (salesmanFullName, salesmanStaffID, salesmanICNum, salesmanBankAcc, salesmanTotalSalesAmount, salesmanTotalSalesUnit) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = connect();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, salesman.getSalesmanFullName());
-            ps.setString(2, salesman.getSalesmanStaffID());
-            ps.setString(3, salesman.getSalesmanICNum());
-            ps.setString(4, salesman.getSalesmanBankAcc());
-            ps.setDouble(5, salesman.getSalesmanTotalSalesAmount());
-            ps.setInt(6, salesman.getSalesmanTotalSalesUnit());
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null,"Salesman information saved successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,"Failed to save salesman information.");
-        }
-    }
+    salesman.calculateGrossSalary();
+    salesman.calculateEPF();
+    salesman.calculateIncomeTax();
+    salesman.calculateNetSalary();
 
+    String query = "INSERT INTO salesmen (salesmanFullName, salesmanStaffID, salesmanICNum, salesmanBankAcc, salesmanTotalSalesAmount, salesmanTotalSalesUnit, grossSalary, epf, incomeTax, netSalary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    try (Connection conn = connect();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setString(1, salesman.getSalesmanFullName());
+        ps.setString(2, salesman.getSalesmanStaffID());
+        ps.setString(3, salesman.getSalesmanICNum());
+        ps.setString(4, salesman.getSalesmanBankAcc());
+        ps.setDouble(5, salesman.getSalesmanTotalSalesAmount());
+        ps.setInt(6, salesman.getSalesmanTotalSalesUnit());
+        ps.setDouble(7, salesman.getSalesmanGrossSalary());
+        ps.setDouble(8, salesman.getSalesmanEPF());
+        ps.setDouble(9, salesman.getSalesmanIncomeTax());
+        ps.setDouble(10, salesman.getSalesmanNetSalary());
+        ps.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Salesman information saved successfully.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to save salesman information.");
+    }
+}
     public SalesmanModel searchSalesman(String staffID) {
         String query = "SELECT * FROM salesmen WHERE salesmanStaffID = ?";
         try (Connection conn = connect();
