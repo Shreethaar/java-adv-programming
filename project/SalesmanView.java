@@ -163,6 +163,9 @@ public class SalesmanView {
                         }
                         break;
                     }
+                    else {
+                        JOptionPane.showMessageDialog(null,"Failed to search for salesman.");
+                    }
                 }
             }
         });
