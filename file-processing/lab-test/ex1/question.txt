@@ -1,0 +1,19 @@
+Create a Java application to manage student records. The program should allow you to:
+
+-Add a new student record.
+-Display all student records.
+-Search for a student by name.
+-Save all student records to a text file.
+-Read student records from a text file.
+-Each student record should include:
+
+Student ID (int)
+Student Name (String)
+Number of Courses (int)
+GPA (double)
+Requirements:
+
+-Define a Student class with the appropriate attributes and methods.
+-Implement methods to add, display, and search student records.
+-Implement methods to save and read student records to/from a text file.
+-Write a Main class to provide a menu for user interaction.
