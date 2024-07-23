@@ -1,0 +1,5 @@
+Salesman Report Sorted by Number of Cars Sold (Lowest to Highest)
+---------------------------------------------------------------
+Name: mahmud, Staff ID: G76121, IC Number: JKL98812, Bank Account: 0908812812, Total Sales Amount: 988821.00, Total Sales Units: 3, Gross Salary: 0.00, EPF: 0.00, Income Tax: 0.00, Net Salary: 0.00
+Name: syasya, Staff ID: 344922, IC Number: 9813291832, Bank Account: 392082383, Total Sales Amount: 932479.00, Total Sales Units: 5, Gross Salary: 0.00, EPF: 0.00, Income Tax: 0.00, Net Salary: 0.00
+Name: hissen, Staff ID: 73282, IC Number: 12897262198, Bank Account: 87326831, Total Sales Amount: 2137823.00, Total Sales Units: 7, Gross Salary: 0.00, EPF: 0.00, Income Tax: 0.00, Net Salary: 0.00
