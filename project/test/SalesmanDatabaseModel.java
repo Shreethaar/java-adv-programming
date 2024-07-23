@@ -17,38 +17,38 @@ public class SalesmanDatabaseModel {
     }
 
     public void addSalesman(SalesmanModel salesman) {
-        salesman.calculateGrossSalary();
-        salesman.calculateEPF();
-        salesman.calculateIncomeTax();
-        salesman.calculateNetSalary();
+    salesman.calculateGrossSalary();
+    salesman.calculateEPF();
+    salesman.calculateIncomeTax();
+    salesman.calculateNetSalary();
 
-        String query = "INSERT INTO salesmen (salesmanFullName, salesmanStaffID, salesmanICNum, salesmanBankAcc, salesmanTotalSalesAmount, salesmanTotalSalesUnit, grossSalary, epf, incomeTax, netSalary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = connect();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, salesman.getSalesmanFullName());
-            ps.setString(2, salesman.getSalesmanStaffID());
-            ps.setString(3, salesman.getSalesmanICNum());
-            ps.setString(4, salesman.getSalesmanBankAcc());
-            ps.setDouble(5, salesman.getSalesmanTotalSalesAmount());
-            ps.setInt(6, salesman.getSalesmanTotalSalesUnit());
-            ps.setDouble(7, salesman.getSalesmanGrossSalary());
-            ps.setDouble(8, salesman.getSalesmanEPF());
-            ps.setDouble(9, salesman.getSalesmanIncomeTax());
-            ps.setDouble(10, salesman.getSalesmanNetSalary());
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Salesman information saved successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to save salesman information. Error: " + e.getMessage());
-        }
+    String query = "INSERT INTO salesmen (salesmanFullName, salesmanStaffID, salesmanICNum, salesmanBankAcc, salesmanTotalSalesAmount, salesmanTotalSalesUnit, grossSalary, epf, incomeTax, netSalary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    try (Connection conn = connect();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setString(1, salesman.getSalesmanFullName());
+        ps.setString(2, salesman.getSalesmanStaffID());
+        ps.setString(3, salesman.getSalesmanICNum());
+        ps.setString(4, salesman.getSalesmanBankAcc());
+        ps.setDouble(5, salesman.getSalesmanTotalSalesAmount());
+        ps.setInt(6, salesman.getSalesmanTotalSalesUnit());
+        ps.setDouble(7, salesman.getSalesmanGrossSalary());
+        ps.setDouble(8, salesman.getSalesmanEPF());
+        ps.setDouble(9, salesman.getSalesmanIncomeTax());
+        ps.setDouble(10, salesman.getSalesmanNetSalary());
+        ps.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Salesman information saved successfully.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to save salesman information.");
     }
-
+}
     public SalesmanModel searchSalesman(String staffID) {
         String query = "SELECT * FROM salesmen WHERE salesmanStaffID = ?";
         try (Connection conn = connect();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, staffID);
+            ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 return new SalesmanModel(
                         rs.getString("salesmanFullName"),
@@ -61,7 +61,7 @@ public class SalesmanDatabaseModel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to search for salesman. Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,"Failed to search for salesman.");
         }
         return null;
     }
@@ -77,10 +77,10 @@ public class SalesmanDatabaseModel {
             ps.setInt(5, salesman.getSalesmanTotalSalesUnit());
             ps.setString(6, salesman.getSalesmanStaffID());
             ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Salesman information updated successfully.");
+            JOptionPane.showMessageDialog(null,"Salesman information updated successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to update salesman information. Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,"Failed to update salesman information.");
         }
     }
 
@@ -90,10 +90,10 @@ public class SalesmanDatabaseModel {
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, staffID);
             ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Salesman deleted successfully.");
+            JOptionPane.showMessageDialog(null,"Salesman deleted successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to delete salesman. Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,"Failed to delete salesman.");
         }
     }
 
@@ -102,10 +102,10 @@ public class SalesmanDatabaseModel {
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(query);
-            JOptionPane.showMessageDialog(null, "System reset successfully.");
+            JOptionPane.showMessageDialog(null,"System reset successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to reset system. Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,"Failed to reset system.");
         }
     }
 
@@ -122,17 +122,13 @@ public class SalesmanDatabaseModel {
                         rs.getString("salesmanICNum"),
                         rs.getString("salesmanBankAcc"),
                         rs.getDouble("salesmanTotalSalesAmount"),
-                        rs.getInt("salesmanTotalSalesUnit"),
-                        rs.getDouble("grosssalary"),
-                        rs.getDouble("epf"),
-                        rs.getDouble("incometax"),
-                        rs.getDouble("netsalary")
+                        rs.getInt("salesmanTotalSalesUnit")
                 );
                 salesmenSet.add(salesman);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to retrieve salesmen. Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,"Failed to retrieve salesmen.");
         }
         return salesmenSet;
     }

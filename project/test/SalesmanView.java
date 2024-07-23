@@ -11,7 +11,7 @@ public class SalesmanView {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Maju Auto Sales Sdn.Bhd Salesman Payroll System");
-        frame.setSize(800, 600);
+        frame.setSize(1200, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -25,13 +25,13 @@ public class SalesmanView {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel titleLabel = new JLabel("Salesman Payroll System");
+        JLabel titleLabel = new JLabel("Salesman PayRoll System");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
         titlePanel.add(titleLabel);
         panel.add(titlePanel);
 
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(7,2,10,10));
+        formPanel.setLayout(new GridLayout(7, 2, 10, 10));
 
         JLabel nameLabel = new JLabel("Salesman Name:", JLabel.CENTER);
         formPanel.add(nameLabel);
@@ -92,11 +92,7 @@ public class SalesmanView {
         TreeSet<SalesmanModel> salesmanIDSortSet = new TreeSet<>(new SalesmanIDComparator());
 
         // Table to display the results
-        String[] columnNames = {
-            "Full Name", "Staff Number", "IC Number", "Bank Account Number",
-            "Total Sales Amount", "Total Sales Unit",
-            "Gross Salary", "EPF", "Income Tax", "Net Salary"
-        };
+        String[] columnNames = {"Salesman Name", "Salesman ID", "IC Number", "Bank Account Number","Total Car Sales","Number of Cars Sold" ,"Gross Salary", "EPF", "Income Tax", "Net Salary"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -143,14 +139,7 @@ public class SalesmanView {
                     salesmanNameSortSet.add(employee);
 
                     // Update the table with the calculated values
-                    Object[] row = {
-                        empName, empID, empICNUM, empBankNum,
-                        String.format("%.2f", empCarSales), empCarAmount,
-                        String.format("%.2f", employee.getSalesmanGrossSalary()),
-                        String.format("%.2f", employee.getSalesmanEPF()),
-                        String.format("%.2f", employee.getSalesmanIncomeTax()),
-                        String.format("%.2f", employee.getSalesmanNetSalary())
-                    };
+                    Object[] row = {empName, empID, empICNUM, empBankNum, String.format("%.2f", employee.getSalesmanGrossSalary()), String.format("%.2f", employee.getSalesmanEPF()), String.format("%.2f", employee.getSalesmanIncomeTax()), String.format("%.2f", employee.getSalesmanNetSalary())};
                     model.addRow(row);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(panel, "Please enter valid numbers for car sales and number of cars sold.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -164,18 +153,21 @@ public class SalesmanView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchTextValue = searchText.getText().toLowerCase();
+                boolean found = false;
                 for (SalesmanModel salesman : dbModel.getAllSalesmen()) {
                     if (salesman.getSalesmanFullName().toLowerCase().contains(searchTextValue) || salesman.getSalesmanStaffID().toLowerCase().contains(searchTextValue)) {
                         for (int i = 0; i < table.getRowCount(); i++) {
                             if (table.getValueAt(i, 0).equals(salesman.getSalesmanFullName()) && table.getValueAt(i, 1).equals(salesman.getSalesmanStaffID())) {
                                 table.setRowSelectionInterval(i, i);
+                                found=true;
                                 break;
                             }
                         }
                         break;
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Failed to search for salesman.");
                     }
+                }
+                if(!found) {
+                    JOptionPane.showMessageDialog(null,"Failed to search for salesman.");
                 }
             }
         });
@@ -217,9 +209,15 @@ public class SalesmanView {
         sortNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.setRowCount(0);
+                model.setRowCount(0); // Clear existing rows
                 TreeSet<SalesmanModel> sortedByName = dbModel.getSortedSalesmenNames();
                 for (SalesmanModel employee : sortedByName) {
+                    // Recalculate salary attributes
+                    employee.calculateGrossSalary();
+                    employee.calculateEPF();
+                    employee.calculateIncomeTax();
+                    employee.calculateNetSalary();
+
                     Object[] row = {
                         employee.getSalesmanFullName(),
                         employee.getSalesmanStaffID(),
@@ -236,12 +234,15 @@ public class SalesmanView {
                 }
             }
         });
-
         sortIDButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0);
                 TreeSet<SalesmanModel> sortedByID = dbModel.getSortedSalesmenStaffID();
                 for (SalesmanModel employee : sortedByID) {
+                    employee.calculateGrossSalary();
+                    employee.calculateEPF();
+                    employee.calculateIncomeTax();
+                    employee.calculateNetSalary();
                     Object[] row = {
                         employee.getSalesmanFullName(),
                         employee.getSalesmanStaffID(),
@@ -261,3 +262,4 @@ public class SalesmanView {
     }
 }
 
+     
