@@ -122,7 +122,11 @@ public class SalesmanDatabaseModel {
                         rs.getString("salesmanICNum"),
                         rs.getString("salesmanBankAcc"),
                         rs.getDouble("salesmanTotalSalesAmount"),
-                        rs.getInt("salesmanTotalSalesUnit")
+                        rs.getInt("salesmanTotalSalesUnit"),
+                        rs.getDouble("grosssalary"),
+                        rs.getDouble("epf"),
+                        rs.getDouble("incometax"),
+                        rs.getDouble("netsalary")
                 );
                 salesmenSet.add(salesman);
             }
