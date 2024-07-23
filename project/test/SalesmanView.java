@@ -11,7 +11,7 @@ public class SalesmanView {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Maju Auto Sales Sdn.Bhd Salesman Payroll System");
-        frame.setSize(1200, 700);
+        frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -86,13 +86,16 @@ public class SalesmanView {
         JButton sortIDButton = new JButton("Sort By ID");
         buttonPanel.add(sortIDButton);
 
+        JButton saveChangesButton = new JButton("Save Changes");
+        buttonPanel.add(saveChangesButton);
+
         panel.add(buttonPanel);
 
         TreeSet<SalesmanModel> salesmanNameSortSet = new TreeSet<>(new SalesmanNameComparator());
         TreeSet<SalesmanModel> salesmanIDSortSet = new TreeSet<>(new SalesmanIDComparator());
 
         // Table to display the results
-        String[] columnNames = {"Salesman Name", "Salesman ID", "IC Number", "Bank Account Number","Total Car Sales","Number of Cars Sold" ,"Gross Salary", "EPF", "Income Tax", "Net Salary"};
+        String[] columnNames = {"Full Name", "Staff Number", "IC Number", "Bank Account Number", "Total Car Sales", "Number of Cars Sold", "Gross Salary", "EPF", "Income Tax", "Net Salary"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -139,7 +142,14 @@ public class SalesmanView {
                     salesmanNameSortSet.add(employee);
 
                     // Update the table with the calculated values
-                    Object[] row = {empName, empID, empICNUM, empBankNum, String.format("%.2f", employee.getSalesmanGrossSalary()), String.format("%.2f", employee.getSalesmanEPF()), String.format("%.2f", employee.getSalesmanIncomeTax()), String.format("%.2f", employee.getSalesmanNetSalary())};
+                    Object[] row = {
+                        empName, empID, empICNUM, empBankNum,
+                        String.format("%.2f", empCarSales), empCarAmount,
+                        String.format("%.2f", employee.getSalesmanGrossSalary()),
+                        String.format("%.2f", employee.getSalesmanEPF()),
+                        String.format("%.2f", employee.getSalesmanIncomeTax()),
+                        String.format("%.2f", employee.getSalesmanNetSalary())
+                    };
                     model.addRow(row);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(panel, "Please enter valid numbers for car sales and number of cars sold.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -153,21 +163,23 @@ public class SalesmanView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchTextValue = searchText.getText().toLowerCase();
-                boolean found = false;
+                boolean found = false;  // Flag to check if the salesman is found
+                
                 for (SalesmanModel salesman : dbModel.getAllSalesmen()) {
                     if (salesman.getSalesmanFullName().toLowerCase().contains(searchTextValue) || salesman.getSalesmanStaffID().toLowerCase().contains(searchTextValue)) {
                         for (int i = 0; i < table.getRowCount(); i++) {
                             if (table.getValueAt(i, 0).equals(salesman.getSalesmanFullName()) && table.getValueAt(i, 1).equals(salesman.getSalesmanStaffID())) {
                                 table.setRowSelectionInterval(i, i);
-                                found=true;
+                                found = true;
                                 break;
                             }
                         }
                         break;
                     }
                 }
-                if(!found) {
-                    JOptionPane.showMessageDialog(null,"Failed to search for salesman.");
+
+                if (!found) {
+                    JOptionPane.showMessageDialog(null, "Failed to search for salesman.");
                 }
             }
         });
@@ -210,6 +222,7 @@ public class SalesmanView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.setRowCount(0); // Clear existing rows
+
                 TreeSet<SalesmanModel> sortedByName = dbModel.getSortedSalesmenNames();
                 for (SalesmanModel employee : sortedByName) {
                     // Recalculate salary attributes
@@ -234,15 +247,19 @@ public class SalesmanView {
                 }
             }
         });
+
         sortIDButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                model.setRowCount(0);
+                model.setRowCount(0); // Clear existing rows
+
                 TreeSet<SalesmanModel> sortedByID = dbModel.getSortedSalesmenStaffID();
                 for (SalesmanModel employee : sortedByID) {
+                    // Recalculate salary attributes
                     employee.calculateGrossSalary();
                     employee.calculateEPF();
                     employee.calculateIncomeTax();
                     employee.calculateNetSalary();
+
                     Object[] row = {
                         employee.getSalesmanFullName(),
                         employee.getSalesmanStaffID(),
@@ -259,7 +276,29 @@ public class SalesmanView {
                 }
             }
         });
+
+        saveChangesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int rowCount = table.getRowCount();
+                for (int i = 0; i < rowCount; i++) {
+                    String empName = table.getValueAt(i, 0).toString();
+                    String empID = table.getValueAt(i, 1).toString();
+                    String empICNUM = table.getValueAt(i, 2).toString();
+                    String empBankNum = table.getValueAt(i, 3).toString();
+                    double empCarSales = Double.parseDouble(table.getValueAt(i, 4).toString());
+                    int empCarAmount = Integer.parseInt(table.getValueAt(i, 5).toString());
+
+                    SalesmanModel employee = new SalesmanModel(empName, empID, empBankNum, empICNUM, empCarSales, empCarAmount);
+                    employee.calculateGrossSalary();
+                    employee.calculateEPF();
+                    employee.calculateIncomeTax();
+                    employee.calculateNetSalary();
+
+                    dbModel.editSalesman(employee);
+                }
+                JOptionPane.showMessageDialog(panel, "Changes saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
     }
 }
-
-     
