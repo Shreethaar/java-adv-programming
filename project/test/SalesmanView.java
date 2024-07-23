@@ -237,6 +237,10 @@ public class SalesmanView {
             writer.write("Salesman Report Sorted by Number of Cars Sold (" + (ascending ? "Lowest to Highest" : "Highest to Lowest") + ")\n");
             writer.write("---------------------------------------------------------------\n");
             for (SalesmanModel salesman : salesmenSortedByCarsSold) {
+                salesman.calculateGrossSalary();
+                salesman.calculateEPF();
+                salesman.calculateIncomeTax();
+                salesman.calculateNetSalary();
                 writer.write(String.format("Name: %s, Staff ID: %s, IC Number: %s, Bank Account: %s, Total Sales Amount: %.2f, Total Sales Units: %d, Gross Salary: %.2f, EPF: %.2f, Income Tax: %.2f, Net Salary: %.2f\n",
                         salesman.getSalesmanFullName(),
                         salesman.getSalesmanStaffID(),
