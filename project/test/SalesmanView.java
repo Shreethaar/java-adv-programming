@@ -31,7 +31,7 @@ public class SalesmanView {
         panel.add(titlePanel);
 
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(7, 2, 10, 10));
+        formPanel.setLayout(new GridLayout(7,2,10,10));
 
         JLabel nameLabel = new JLabel("Salesman Name:", JLabel.CENTER);
         formPanel.add(nameLabel);
@@ -88,8 +88,15 @@ public class SalesmanView {
 
         panel.add(buttonPanel);
 
+        TreeSet<SalesmanModel> salesmanNameSortSet = new TreeSet<>(new SalesmanNameComparator());
+        TreeSet<SalesmanModel> salesmanIDSortSet = new TreeSet<>(new SalesmanIDComparator());
+
         // Table to display the results
-        String[] columnNames = {"Full Name", "Staff Number", "IC Number", "Bank Account Number", "Gross Salary", "EPF", "Income Tax", "Net Salary"};
+        String[] columnNames = {
+            "Full Name", "Staff Number", "IC Number", "Bank Account Number",
+            "Total Sales Amount", "Total Sales Unit",
+            "Gross Salary", "EPF", "Income Tax", "Net Salary"
+        };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -133,10 +140,12 @@ public class SalesmanView {
 
                     // Add employee to the database
                     dbModel.addSalesman(employee);
+                    salesmanNameSortSet.add(employee);
 
                     // Update the table with the calculated values
                     Object[] row = {
                         empName, empID, empICNUM, empBankNum,
+                        String.format("%.2f", empCarSales), empCarAmount,
                         String.format("%.2f", employee.getSalesmanGrossSalary()),
                         String.format("%.2f", employee.getSalesmanEPF()),
                         String.format("%.2f", employee.getSalesmanIncomeTax()),
@@ -155,23 +164,18 @@ public class SalesmanView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchTextValue = searchText.getText().toLowerCase();
-                boolean found = false;
                 for (SalesmanModel salesman : dbModel.getAllSalesmen()) {
-                    if (salesman.getSalesmanFullName().toLowerCase().contains(searchTextValue) ||
-                        salesman.getSalesmanStaffID().toLowerCase().contains(searchTextValue)) {
+                    if (salesman.getSalesmanFullName().toLowerCase().contains(searchTextValue) || salesman.getSalesmanStaffID().toLowerCase().contains(searchTextValue)) {
                         for (int i = 0; i < table.getRowCount(); i++) {
-                            if (table.getValueAt(i, 0).equals(salesman.getSalesmanFullName()) &&
-                                table.getValueAt(i, 1).equals(salesman.getSalesmanStaffID())) {
+                            if (table.getValueAt(i, 0).equals(salesman.getSalesmanFullName()) && table.getValueAt(i, 1).equals(salesman.getSalesmanStaffID())) {
                                 table.setRowSelectionInterval(i, i);
-                                found = true;
                                 break;
                             }
                         }
-                        if (found) break;
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to search for salesman.");
                     }
-                }
-                if (!found) {
-                    JOptionPane.showMessageDialog(panel, "Salesman not found.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -184,8 +188,6 @@ public class SalesmanView {
                     String staffID = model.getValueAt(selectedRow, 1).toString();
                     dbModel.deleteSalesman(staffID);
                     model.removeRow(selectedRow);
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Please select a row to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -223,6 +225,8 @@ public class SalesmanView {
                         employee.getSalesmanStaffID(),
                         employee.getSalesmanICNum(),
                         employee.getSalesmanBankAcc(),
+                        String.format("%.2f", employee.getSalesmanTotalSalesAmount()),
+                        employee.getSalesmanTotalSalesUnit(),
                         String.format("%.2f", employee.getSalesmanGrossSalary()),
                         String.format("%.2f", employee.getSalesmanEPF()),
                         String.format("%.2f", employee.getSalesmanIncomeTax()),
@@ -243,6 +247,8 @@ public class SalesmanView {
                         employee.getSalesmanStaffID(),
                         employee.getSalesmanICNum(),
                         employee.getSalesmanBankAcc(),
+                        String.format("%.2f", employee.getSalesmanTotalSalesAmount()),
+                        employee.getSalesmanTotalSalesUnit(),
                         String.format("%.2f", employee.getSalesmanGrossSalary()),
                         String.format("%.2f", employee.getSalesmanEPF()),
                         String.format("%.2f", employee.getSalesmanIncomeTax()),
@@ -254,3 +260,4 @@ public class SalesmanView {
         });
     }
 }
+
